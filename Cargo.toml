@@ -1,0 +1,13 @@
+[package]
+authors = [{{toml-escape author}}]
+name = "cortex-m-quickstart"
+version = "0.0.0"
+
+[dependencies]
+cortex-m = "0.2.1"
+cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt" }
+cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp" }
+{{name}} = "*"
+
+[features]
+default = ["cortex-m-rt/linker-script"]
