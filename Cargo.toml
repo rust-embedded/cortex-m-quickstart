@@ -11,3 +11,6 @@ cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp" }
 
 [features]
 default = ["cortex-m-rt/linker-script"]
+
+[profile.release]
+lto = true
