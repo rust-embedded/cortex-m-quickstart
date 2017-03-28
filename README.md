@@ -6,7 +6,7 @@
 ## Usage
 
 ```
-$ cargo new stm32f100xx --git https://github.com/japaric/cortex-m-quickstart
+$ cargo new stm32f100xx --template https://github.com/japaric/cortex-m-quickstart
 ```
 
 Where `stm32f100xx` is the name of the microcontroller family you are
