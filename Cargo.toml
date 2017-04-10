@@ -4,9 +4,9 @@ name = "cortex-m-quickstart"
 version = "0.0.0"
 
 [dependencies]
-cortex-m = "0.2.1"
+cortex-m = "0.2.2"
 cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt" }
-cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp" }
+cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp", branch = "next" }
 {{name}} = "*"
 
 [features]
