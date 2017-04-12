@@ -14,6 +14,7 @@ targeting.
 
 ## Supported microcontroller families
 
+- nrf51
 - stm32f100xx
 - stm32f103xx
 - stm32f30x
