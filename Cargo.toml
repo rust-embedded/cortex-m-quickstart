@@ -5,7 +5,7 @@ version = "0.0.0"
 
 [dependencies]
 cortex-m = "0.2.2"
-cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt" }
+cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt", branch = "next" }
 cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp", branch = "next" }
 {{name}} = "*"
 
