@@ -5,6 +5,7 @@
 //!
 //! [`itmdump`]: https://docs.rs/itm/0.1.1/itm/
 
+#![feature(used)]
 #![no_std]
 
 #[macro_use]
@@ -12,21 +13,21 @@ extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate {{name}};
 
-use cortex_m::{exception, peripheral};
+use cortex_m::peripheral;
 use {{name}}::interrupt;
 
 fn main() {
-    cortex_m::interrupt::free(|cs| {
-                                  let itm = peripheral::ITM.borrow(&cs);
+    cortex_m::interrupt::free(
+        |cs| {
+            let itm = peripheral::ITM.borrow(&cs);
 
-                                  iprintln!(&itm.stim[0], "Hello, world!");
-                              });
+            iprintln!(&itm.stim[0], "Hello, world!");
+        },
+    );
 }
 
-#[no_mangle]
-pub static _INTERRUPTS: interrupt::Handlers =
+#[allow(dead_code)]
+#[used]
+#[link_section = ".rodata.interrupts"]
+static INTERRUPTS: interrupt::Handlers =
     interrupt::Handlers { ..interrupt::DEFAULT_HANDLERS };
-
-#[no_mangle]
-pub static _EXCEPTIONS: exception::Handlers =
-    exception::Handlers { ..exception::DEFAULT_HANDLERS };
