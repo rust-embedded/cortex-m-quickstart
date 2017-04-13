@@ -9,8 +9,5 @@ cortex-m-rt = "0.1.0"
 cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp" }
 {{name}} = "*"
 
-[features]
-default = ["cortex-m-rt/linker-script"]
-
 [profile.release]
 lto = true
