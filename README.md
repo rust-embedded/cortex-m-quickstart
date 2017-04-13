@@ -5,8 +5,12 @@
 
 ## Usage
 
+> **NOTE** The `--template` feature has been removed from Cargo recently. This
+> command temporarily rollback to an older Cargo version to run the `new`
+> command:
+
 ```
-$ cargo new stm32f100xx --template https://github.com/japaric/cortex-m-quickstart
+$ cargo +nightly-2017-04-01 new stm32f100xx --template https://github.com/japaric/cortex-m-quickstart
 ```
 
 Where `stm32f100xx` is the name of the microcontroller family you are
