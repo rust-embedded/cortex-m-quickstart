@@ -1,27 +1,27 @@
 [target.thumbv6m-none-eabi]
 rustflags = [
   "-C", "link-arg=-Tlink.x",
-  "-C", "link-arg=-Wl,--build-id=none",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
 ]
 
 [target.thumbv7m-none-eabi]
 rustflags = [
   "-C", "link-arg=-Tlink.x",
-  "-C", "link-arg=-Wl,--build-id=none",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
 ]
 
 [target.thumbv7em-none-eabi]
 rustflags = [
   "-C", "link-arg=-Tlink.x",
-  "-C", "link-arg=-Wl,--build-id=none",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
 ]
 
 [target.thumbv7em-none-eabihf]
 rustflags = [
   "-C", "link-arg=-Tlink.x",
-  "-C", "link-arg=-Wl,--build-id=none",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
 ]
