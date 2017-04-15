@@ -1,3 +1,5 @@
+//! Device specific version of "Hello, world!"
+//!
 //! Prints "Hello, world!" on the OpenOCD console using semihosting
 
 #![feature(used)]
@@ -14,6 +16,8 @@ fn main() {
     hprintln!("Hello, world!");
 }
 
+// This is the device specific bit: properly populated interrupt handlers
+// Tough we are not using any of them in this example
 #[allow(dead_code)]
 #[used]
 #[link_section = ".rodata.interrupts"]

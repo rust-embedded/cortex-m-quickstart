@@ -1,3 +1,22 @@
+//! Stack Resource Policy
+//!
+//! You should see the following output
+//!
+//! ``` text
+//! IDLE
+//! J1: enter
+//! J2: enter
+//! J2(R1)
+//! J2: exit
+//! J1: after requesting J2
+//! J1(R1): before requesting J2
+//! J1(R1): after requesting J2
+//! J2: enter
+//! J2(R1)
+//! J2: exit
+//! J1: exit
+//! ```
+
 #![feature(const_fn)]
 #![feature(used)]
 #![no_std]
@@ -15,12 +34,16 @@ use {{name}}::interrupt::{Exti0Irq, Exti1Irq};
 static R1: Resource<(), C4> = Resource::new(());
 static R2: Resource<(), C2> = Resource::new(());
 
-fn init(_ceil: C16) {}
+fn init(_prio: P0, _ceil: C16) {}
 
-fn idle(_prio: P0) {
+fn idle(_prio: P0) -> ! {
     hprintln!("IDLE");
 
     rtfm::request(j1);
+
+    loop {
+        rtfm::wfi();
+    }
 }
 
 tasks!({{name}}, {

@@ -27,10 +27,12 @@ extern "C" fn hard_fault(_: exception::HardFault) {
     asm::bkpt()
 }
 
+// When the "exceptions" feature is disabled, you'll have to provide this symbol
 #[allow(dead_code)]
 #[used]
 #[link_section = ".rodata.exceptions"]
 static EXCEPTIONS: exception::Handlers = exception::Handlers {
+    // This is the exception handler override
     hard_fault: hard_fault,
     ..exception::DEFAULT_HANDLERS
 };

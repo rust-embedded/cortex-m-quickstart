@@ -1,5 +1,11 @@
 //! Sends "Hello, world!" through the ITM port 0
 //!
+//! **NOTE** Not all Cortex-M chips support ITM. You'll have to connect your
+//! microcontroller's SWO pin to the debug interface. Some development boards
+//! don't provide this option.
+//!
+//! This is faster than using semihosting.
+//!
 //! You'll need [`itmdump`] to receive the message plus you'll need to enable
 //! OpenOCD's ITM support in `.gdbinit`.
 //!
