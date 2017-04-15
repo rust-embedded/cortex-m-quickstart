@@ -42,6 +42,7 @@ fn idle(_prio: P0) -> ! {
 
     rtfm::request(j1);
 
+    // Sleep
     loop {
         rtfm::wfi();
     }
