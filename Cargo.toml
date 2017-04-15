@@ -3,7 +3,7 @@ authors = [{{toml-escape author}}]
 name = "cortex-m-quickstart"
 version = "0.0.0"
 
-[dependencies]
+[dev-dependencies]
 cortex-m = "0.2.3"
 cortex-m-rt = "0.1.0"
 cortex-m-srp = { git = "https://github.com/japaric/cortex-m-srp" }
