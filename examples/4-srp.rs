@@ -29,6 +29,7 @@ extern crate cortex_m_srp as rtfm;
 extern crate {{name}};
 
 use rtfm::{C2, C4, C16, P0, P1, P3, Resource};
+// NOTE device dependent
 use {{name}}::interrupt::{Exti0Irq, Exti1Irq};
 
 static R1: Resource<(), C4> = Resource::new(());
@@ -46,6 +47,7 @@ fn idle(_prio: P0) -> ! {
     }
 }
 
+// NOTE Exti0Irq and Exti1Irq are device dependent
 tasks!({{name}}, {
     j1: (Exti0Irq, P1),
     j2: (Exti1Irq, P3),
