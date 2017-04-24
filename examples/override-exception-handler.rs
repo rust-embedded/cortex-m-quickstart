@@ -1,19 +1,17 @@
 //! Overriding an exception
 //!
-//! **NOTE** You have to disable the `cortex-m-rt` crate "exceptions" feature to
-//! make this work.
+//! **NOTE** You have to disable the `cortex-m-rt` crate's "exceptions" feature
+//! to make this work.
 
 #![feature(used)]
 #![no_std]
 
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate {{name}};
 
 use core::ptr;
 
 use cortex_m::{asm, exception};
-use {{name}}::interrupt;
 
 fn main() {
     unsafe {
@@ -37,8 +35,12 @@ static EXCEPTIONS: exception::Handlers = exception::Handlers {
     ..exception::DEFAULT_HANDLERS
 };
 
+// As we are not using interrupts, we just register a dummy catch all handler
 #[allow(dead_code)]
 #[used]
 #[link_section = ".rodata.interrupts"]
-static INTERRUPTS: interrupt::Handlers =
-    interrupt::Handlers { ..interrupt::DEFAULT_HANDLERS };
+static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+
+extern "C" fn default_handler() {
+    asm::bkpt();
+}
