@@ -20,6 +20,10 @@
 //!
 //! - Specify the memory layout of the target device
 //!
+//! (Note that some board support crates may provide this file for you (check
+//! the crate documentation). If you are using one that does that then remove
+//! *both* the `memory.x` and `build.rs` files.)
+//!
 //! ``` text
 //! $ edit memory.x && cat $_
 //! MEMORY
@@ -28,6 +32,11 @@
 //!   FLASH : ORIGIN = 0x08000000, LENGTH = 256K
 //!   RAM : ORIGIN = 0x20000000, LENGTH = 40K
 //! }
+//!
+//! /* This is where the call stack will be allocated. */
+//! /* The stack is of the full descending type. */
+//! /* NOTE Do NOT modify `_stack_start` unless you know what you are doing */
+//! _stack_start = ORIGIN(RAM) + LENGTH(RAM);
 //! ```
 //!
 //! - Optionally, set a default build target
@@ -45,7 +54,7 @@
 //! # add a device crate, or
 //! $ cargo add stm32f30x
 //!
-//! # add a BSP crate
+//! # add a board support crate
 //! $ cargo add f3
 //! ```
 //!
