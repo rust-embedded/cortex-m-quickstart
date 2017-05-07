@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## v0.1.2 - 2017-05-07
+
+### Fixed
+
+- .gdbinit: jump to reset handler after loading the program.
+
 ## v0.1.1 - 2017-04-27
 
 ### Changed
@@ -17,5 +23,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.2...HEAD
+[v0.1.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.0...v0.1.1
