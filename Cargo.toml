@@ -9,7 +9,7 @@ repository = "https://github.com/japaric/cortex-m-quickstart"
 version = "0.1.2"
 
 [dependencies]
-cortex-m = "0.2.4"
+cortex-m = "0.2.6"
 cortex-m-rt = "0.2.0"
 
 [profile.release]
