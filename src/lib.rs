@@ -1,5 +1,15 @@
 //! A template for building applications for ARM Cortex-M microcontrollers
 //!
+//! # Dependencies
+//!
+//! - Nightly Rust toolchain: `rustup default nightly`
+//! - ARM linker: `sudo apt-get install binutils-arm-none-eabi`
+//! - Cargo `clone` subcommand: `cargo install cargo-clone`
+//! - GDB: `sudo apt-get install gdb-arm-none-eabi`
+//! - OpenOCD: `sudo apt-get install OpenOCD`
+//! - Xargo: `cargo install xargo`
+//! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
+//!
 //! # Usage
 //!
 //! - Clone this crate
@@ -67,9 +77,6 @@
 //! - Build the application
 //!
 //! ``` text
-//! # if not installed
-//! $ cargo install xargo
-//!
 //! # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
 //! $ xargo build --release
 //!
@@ -200,6 +207,19 @@
 //! ```
 //!
 //! Solution: Use `xargo build`.
+//!
+//! ## Used the stable toolchain
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ xargo build
+//! error: failed to run `rustc` to learn about target-specific information
+//!
+//! To learn more, run the command again with --verbose.
+//! ```
+//!
+//! Solution: Switch to the nightly toolchain with `rustup default nightly`.
 //!
 //! ## Used `gdb` instead of `arm-none-eabi-gdb`
 //!
