@@ -95,9 +95,136 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
+//! - Flash the program
+//!
+//! ```
+//! # Launch OpenOCD on a terminal
+//! $ openocd -f (..)
+//! ```
+//!
+//! ```
+//! # Start debug session
+//! $ arm-none-eabi-gdb target/..
+//! ```
+//!
 //! # Examples
 //!
 //! Check the [examples module](./examples/index.html)
+//!
+//! # Troubleshooting
+//!
+//! This section contains fixes for common errors encountered when the
+//! `cortex-m-quickstart` template is misused.
+//!
+//! ## Forgot to launch an OpenOCD instance
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ arm-none-eabi-gdb target/..
+//! Reading symbols from hello...done.
+//! .gdbinit:1: Error in sourced command file:
+//! :3333: Connection timed out.
+//! ```
+//!
+//! Solution: Launch OpenOCD on other terminal. See [Usage] section.
+//!
+//! [Usage]: ./index.html#usage
+//!
+//! ## Didn't modify the `memory.x` linker script
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ xargo build
+//! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
+//! error: linking with `arm-none-eabi-ld` failed: exit code: 1
+//! |
+//! = note: "arm-none-eabi-ld" "-L" (..)
+//! = note: arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
+//! arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
+//! arm-none-eabi-ld:
+//! Invalid '.rodata.exceptions' section.
+//! Make sure to place a static with type `cortex_m::exception::Handlers`
+//! in that section (cf. #[link_section]) ONLY ONCE.
+//! ```
+//!
+//! Solution: Specify your device memory layout in the `memory.x` linker script.
+//! See [Usage] section.
+//!
+//! ## Forgot to set a default build target
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ xargo build
+//! (..)
+//! Compiling cortex-m-semihosting v0.1.3
+//! error[E0463]: can't find crate for `std`
+//!
+//! error: aborting due to previous error
+//! ```
+//!
+//! Solution: Set a default build target in the `.cargo/config` file
+//! (see [Usage] section), or call Xargo with `--target` flag:
+//! `xargo build --target thumbv7em-none-eabi`.
+//!
+//! ## Called OpenOCD with wrong arguments
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ openocd -f ..
+//! (..)
+//! Error: open failed
+//! in procedure 'init'
+//! in procedure 'ocd_bouncer'
+//! ```
+//!
+//! Solution: Correct the OpenOCD arguments. Check the
+//! `/usr/share/openocd/scripts` directory (exact location varies per
+//! distribution / OS) for a list of scripts that can be used.
+//!
+//! ## Used Cargo instead of Xargo
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ cargo build
+//! Compiling cortex-m-rt v0.2.0
+//! error[E0463]: can't find crate for `core`
+//! |
+//! = note: the `thumbv7em-none-eabihf` target may not be installed
+//!
+//! error: aborting due to previous error
+//! ```
+//!
+//! Solution: Use `xargo build`.
+//!
+//! ## Used `gdb` instead of `arm-none-eabi-gdb`
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ gdb target/..
+//! Reading symbols from hello...done.
+//! warning: Architecture rejected target-supplied description
+//! warning: Cannot convert floating-point register value to ..
+//! value has been optimized out
+//! Cannot write the dashboard
+//! Traceback (most recent call last):
+//! File "<string>", line 353, in render
+//! File "<string>", line 846, in lines
+//! gdb.error: Frame is invalid.
+//! 0x00000000 in ?? ()
+//! semihosting is enabled
+//! Loading section .text, size 0xd88 lma 0x8000000
+//! Start address 0x8000000, load size 3464
+//! .gdbinit:6: Error in sourced command file:
+//! Remote connection closed
+//! ```
+//!
+//! Solution: Use `arm-none-eabi-gdb target/..`
 
 #![no_std]
 
