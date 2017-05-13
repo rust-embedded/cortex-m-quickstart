@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## v0.1.3 - 2017-05-12
+
+### Added
+
+- A troubleshooting section to the documentation
+
+### Changed
+
+- Bumped the cortex-m crate version to v0.2.6
+
 ## v0.1.2 - 2017-05-07
 
 ### Fixed
@@ -23,6 +33,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.3...HEAD
+[v0.1.3]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.2...v0.1.3
 [v0.1.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.0...v0.1.1
