@@ -74,6 +74,13 @@
 //! $ rm -r src/* && cp examples/hello.rs src/main.rs
 //! ```
 //!
+//! - Disable incremental compilation. It doesn't work for embedded development.
+//!   You'll hit nonsensical linker errors if you use it.
+//!
+//! ``` text
+//! $ unset CARGO_INCREMENTAL
+//! ```
+//!
 //! - Build the application
 //!
 //! ``` text
@@ -220,6 +227,30 @@
 //! ```
 //!
 //! Solution: Switch to the nightly toolchain with `rustup default nightly`.
+//!
+//! ## Used `CARGO_INCREMENTAL=1`
+//!
+//! Error message:
+//!
+//! ```
+//! $ xargo build
+//! error: linking with `arm-none-eabi-ld` failed: exit code: 1
+//!     |
+//! = note: "arm-none-eabi-ld" (..)
+//!     = note: arm-none-eabi-ld:
+//! You must specify the exception handlers.
+//!     Create a non `pub` static variable with type
+//!     `cortex_m::exception::Handlers` and place it in the
+//!     '.rodata.exceptions' section. (cf. #[link_section]). Apply the
+//!     `#[used]` attribute to the variable to make it reach the linker.
+//!     arm-none-eabi-ld:
+//! Invalid '.rodata.exceptions' section.
+//!     Make sure to place a static with type `cortex_m::exception::Handlers`
+//!     in that section (cf. #[link_section]) ONLY ONCE.
+//! ```
+//!
+//! Solution: `$ unset CARGO_INCREMENAL`. And to be on the safe side, call
+//! `cargo clean` and thrash the Xargo sysroot: `$ rm -rf ~/.xargo`
 //!
 //! ## Used `gdb` instead of `arm-none-eabi-gdb`
 //!
