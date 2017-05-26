@@ -5,6 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.1.6] - 2017-05-26
+
+### Added
+
+- Set the default runner in .cargo/config to `arm-none-eabi-gdb`. Now `xargo
+  run` will build the program and start a debug session.
+
 ## [v0.1.5] - 2017-05-16
 
 ### Added
@@ -50,7 +57,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.6...HEAD
+[v0.1.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.5...v0.1.6
 [v0.1.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.4...v0.1.5
 [v0.1.4]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.3...v0.1.4
 [v0.1.3]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.2...v0.1.3
