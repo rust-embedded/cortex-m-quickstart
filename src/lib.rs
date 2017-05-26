@@ -121,6 +121,16 @@
 //! $ arm-none-eabi-gdb target/..
 //! ```
 //!
+//! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you
+//! can simply run `cargo run` or `cargo run --example $ex` to build and flash
+//! the program, and immediately start a debug session. IOW, it lets you omit
+//! `arm-none-eabi-gdb` command.
+//!
+//! ```
+//! $ cargo run --example hello
+//! > # drop you into GDB session
+//! ```
+//!
 //! # Examples
 //!
 //! Check the [examples module](./examples/index.html)
