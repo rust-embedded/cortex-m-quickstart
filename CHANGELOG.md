@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.1.7] - 2017-05-27
+
 ### Added
 
 - Documentation and an example about how to use the heap and a dynamic memory
@@ -13,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Bumped the `cortex-m-rt` dependency to v0.2.2
+- Bumped the `cortex-m` dependency to v0.2.7
 
 ## [v0.1.6] - 2017-05-26
 
@@ -66,7 +69,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.7...HEAD
+[v0.1.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.6...v0.1.7
 [v0.1.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.5...v0.1.6
 [v0.1.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.4...v0.1.5
 [v0.1.4]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.3...v0.1.4
