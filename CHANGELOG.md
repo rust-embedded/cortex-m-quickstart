@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Documentation and an example about how to use the heap and a dynamic memory
+  allocator.
+
+### Changed
+
+- Bumped the `cortex-m-rt` dependency to v0.2.2
+
 ## [v0.1.6] - 2017-05-26
 
 ### Added

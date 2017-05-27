@@ -27,7 +27,7 @@
 //! $2 = cortex_m::exception::Exception::HardFault
 //!
 //! (gdb) # Where did we come from?
-//! (gdb) print _e
+//! (gdb) backtrace
 //! ```
 //!
 //! ```
