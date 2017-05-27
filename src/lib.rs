@@ -111,24 +111,24 @@
 //!
 //! - Flash the program
 //!
-//! ```
+//! ``` text
 //! # Launch OpenOCD on a terminal
 //! $ openocd -f (..)
 //! ```
 //!
-//! ```
+//! ``` text
 //! # Start debug session
 //! $ arm-none-eabi-gdb target/..
 //! ```
 //!
 //! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you
-//! can simply run `cargo run` or `cargo run --example $ex` to build and flash
-//! the program, and immediately start a debug session. IOW, it lets you omit
+//! can simply run `cargo run` or `cargo run --example $example` to build the
+//! program, and immediately start a debug session. IOW, it lets you omit the
 //! `arm-none-eabi-gdb` command.
 //!
-//! ```
+//! ``` text
 //! $ cargo run --example hello
-//! > # drop you into GDB session
+//! > # drops you into a GDB session
 //! ```
 //!
 //! # Examples
@@ -242,7 +242,7 @@
 //!
 //! Error message:
 //!
-//! ```
+//! ``` text
 //! $ xargo build
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //!     |

@@ -11,6 +11,7 @@ main() {
         crash
         register-interrupt-handler
         override-exception-handler
+        allocator
     )
 
     rm -rf src/examples
