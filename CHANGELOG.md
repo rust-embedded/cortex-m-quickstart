@@ -5,6 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.1.8] - 2017-05-30
+
+### Changed
+
+- Bumped the cortex-m-rt dependency to v0.2.3, and documented the `_stext`
+  symbol (see memory.x).
+
 ## [v0.1.7] - 2017-05-27
 
 ### Added
@@ -69,7 +76,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.8...HEAD
+[v0.1.8]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.7...v0.1.8
 [v0.1.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.6...v0.1.7
 [v0.1.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.5...v0.1.6
 [v0.1.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.4...v0.1.5
