@@ -10,7 +10,7 @@ version = "0.1.7"
 
 [dependencies]
 cortex-m = "0.2.7"
-cortex-m-rt = "0.2.2"
+cortex-m-rt = "0.2.3"
 
 [profile.release]
 lto = true
