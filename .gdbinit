@@ -11,5 +11,8 @@ monitor arm semihosting enable
 # # 2000000 is the frequency of the SWO pin
 # monitor tpiu config external uart off 8000000 2000000
 
+# # enable ITM port 0
+# monitor itm port 0 on
+
 load
 step
