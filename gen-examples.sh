@@ -9,8 +9,8 @@ main() {
         itm
         panic
         crash
-        register-interrupt-handler
         override-exception-handler
+        device
         allocator
     )
 

@@ -42,11 +42,6 @@
 //!   FLASH : ORIGIN = 0x08000000, LENGTH = 256K
 //!   RAM : ORIGIN = 0x20000000, LENGTH = 40K
 //! }
-//!
-//! /* This is where the call stack will be allocated. */
-//! /* The stack is of the full descending type. */
-//! /* NOTE Do NOT modify `_stack_start` unless you know what you are doing */
-//! _stack_start = ORIGIN(RAM) + LENGTH(RAM);
 //! ```
 //!
 //! - Optionally, set a default build target
@@ -62,10 +57,10 @@
 //!
 //! ``` text
 //! # add a device crate, or
-//! $ cargo add stm32f30x
+//! $ cargo add stm32f103xx
 //!
 //! # add a board support crate
-//! $ cargo add f3
+//! $ cargo add blue-pill --git https://github.com/japaric/blue-pill
 //! ```
 //!
 //! - Write the application or start from one of the examples
@@ -117,7 +112,7 @@
 //! ```
 //!
 //! ``` text
-//! # Start debug session
+//! # Start a debug session in another terminal
 //! $ arm-none-eabi-gdb target/..
 //! ```
 //!

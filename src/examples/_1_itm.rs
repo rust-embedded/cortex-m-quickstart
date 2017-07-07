@@ -7,9 +7,11 @@
 //! ITM is much faster than semihosting. Like 4 orders of magnitude or so.
 //!
 //! You'll need [`itmdump`] to receive the message on the host plus you'll need
-//! to uncomment OpenOCD's ITM support in `.gdbinit`.
+//! to uncomment the `monitor` commands in the `.gdbinit` file.
 //!
 //! [`itmdump`]: https://docs.rs/itm/0.1.1/itm/
+//!
+//! ---
 //!
 //! ```
 //! 
@@ -23,19 +25,16 @@
 //! use cortex_m::{asm, interrupt, peripheral};
 //! 
 //! fn main() {
-//!     interrupt::free(
-//!         |cs| {
-//!             let itm = peripheral::ITM.borrow(&cs);
+//!     interrupt::free(|cs| {
+//!         let itm = peripheral::ITM.borrow(&cs);
 //! 
-//!             iprintln!(&itm.stim[0], "Hello, world!");
-//!         },
-//!     );
+//!         iprintln!(&itm.stim[0], "Hello, world!");
+//!     });
 //! }
 //! 
 //! // As we are not using interrupts, we just register a dummy catch all handler
-//! #[allow(dead_code)]
+//! #[link_section = ".vector_table.interrupts"]
 //! #[used]
-//! #[link_section = ".rodata.interrupts"]
 //! static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
 //! 
 //! extern "C" fn default_handler() {
