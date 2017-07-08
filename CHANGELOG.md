@@ -82,7 +82,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.8...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.0...HEAD
+[v0.2.0]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.8...v0.2.0
 [v0.1.8]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.7...v0.1.8
 [v0.1.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.6...v0.1.7
 [v0.1.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.1.5...v0.1.6
