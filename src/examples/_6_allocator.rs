@@ -12,7 +12,6 @@
 //! stage = 0
 //!
 //! [dependencies.compiler_builtins]
-//! git = "https://github.com/rust-lang-nursery/compiler-builtins"
 //! stage = 1
 //! ```
 //!
