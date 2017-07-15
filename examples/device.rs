@@ -24,28 +24,57 @@
 //!
 //! ---
 
+#![deny(warnings)]
+#![feature(const_fn)]
 #![no_std]
 
 extern crate cortex_m;
+extern crate cortex_m_semihosting;
 #[macro_use(exception, interrupt)]
 extern crate stm32f103xx;
 
-use cortex_m::interrupt;
+use core::cell::RefCell;
+use core::fmt::Write;
+
+use cortex_m::interrupt::{self, Mutex};
+use cortex_m::peripheral::SystClkSource;
+use cortex_m_semihosting::hio::{self, HStdout};
+use stm32f103xx::Interrupt;
+
+static HSTDOUT: Mutex<RefCell<Option<HStdout>>> =
+    Mutex::new(RefCell::new(None));
 
 fn main() {
     interrupt::free(|cs| {
-        let _gpioa = stm32f103xx::GPIOA.borrow(cs);
-        // do something with GPIOA
+        let hstdout = HSTDOUT.borrow(cs);
+        if let Ok(fd) = hio::hstdout() {
+            *hstdout.borrow_mut() = Some(fd);
+        }
+
+        let nvic = stm32f103xx::NVIC.borrow(cs);
+        nvic.enable(Interrupt::TIM2);
+
+        let syst = stm32f103xx::SYST.borrow(cs);
+        syst.set_clock_source(SystClkSource::Core);
+        syst.set_reload(8_000_000); // 1s
+        syst.enable_counter();
+        syst.enable_interrupt();
     });
 }
 
-exception!(SYS_TICK, tick, locals: {
-    ticks: u32 = 0;
-});
+exception!(SYS_TICK, tick);
 
-fn tick(l: &mut SYS_TICK::Locals) {
-    l.ticks += 1;
-    // ..
+fn tick() {
+    interrupt::free(|cs| {
+        let hstdout = HSTDOUT.borrow(cs);
+        if let Some(hstdout) = hstdout.borrow_mut().as_mut() {
+            writeln!(*hstdout, "Tick").ok();
+        }
+
+        let nvic = stm32f103xx::NVIC.borrow(cs);
+
+        nvic.set_pending(Interrupt::TIM2);
+    });
 }
 
 interrupt!(TIM2, tock, locals: {
@@ -54,5 +83,11 @@ interrupt!(TIM2, tock, locals: {
 
 fn tock(l: &mut TIM2::Locals) {
     l.tocks += 1;
-    // ..
+
+    interrupt::free(|cs| {
+        let hstdout = HSTDOUT.borrow(cs);
+        if let Some(hstdout) = hstdout.borrow_mut().as_mut() {
+            writeln!(*hstdout, "Tock ({})", l.tocks).ok();
+        }
+    });
 }
