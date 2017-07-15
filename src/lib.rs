@@ -188,6 +188,35 @@
 //! (see [Usage] section), or call Xargo with `--target` flag:
 //! `xargo build --target thumbv7em-none-eabi`.
 //!
+//! ## Overwrote the original `.cargo/config` file
+//!
+//! Error message:
+//!
+//! ``` text
+//! error: linking with `arm-none-eabi-gcc` failed: exit code: 1
+//!   |
+//!   = note: (..)
+//! (..)
+//! (..)/crt0.o: In function `_start':
+//! (.text+0x90): undefined reference to `memset'
+//! (..)/crt0.o: In function `_start':
+//! (.text+0xd0): undefined reference to `atexit'
+//! (..)/crt0.o: In function `_start':
+//! (.text+0xd4): undefined reference to `__libc_init_array'
+//! (..)/crt0.o: In function `_start':
+//! (.text+0xe4): undefined reference to `exit'
+//! (..)/crt0.o: In function `_start':
+//! (.text+0x100): undefined reference to `__libc_fini_array'
+//! collect2: error: ld returned 1 exit status
+//! ```
+//!
+//! Solution: You probably overwrote the original `.cargo/config` instead of
+//! appending the default build target (e.g. `cat >` instead of `cat >>`). The
+//! less error prone way to fix this is to remove the `.cargo` directory, clone
+//! a new copy of the template and then copy the `.cargo` directory from that
+//! fresh template into your current project. Don't forget to *append* the
+//! default build target to `.cargo/config`.
+//!
 //! ## Called OpenOCD with wrong arguments
 //!
 //! Error message:
