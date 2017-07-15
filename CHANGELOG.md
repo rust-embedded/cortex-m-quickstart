@@ -5,6 +5,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.1] - 2017-07-14
+
+### Added
+
+- Troubleshooting documentation: how to fix the error of overwriting the
+  `.cargo/config` file when you meant to append text to it.
+
+### Changed
+
+- Xargo.toml: Changed the source of the `compiler-builtins` crate from git to
+  the `rust-src` component.
+
+- Expanded the `device` example to do some I/O.
+
 ## [v0.2.0] - 2017-07-07
 
 ### Changed
