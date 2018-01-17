@@ -310,6 +310,37 @@
 //! ```
 //!
 //! Solution: Use `arm-none-eabi-gdb target/..`
+//!
+//! # Used a named piped for `itm.fifo`
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ xargo run [--example ..]
+//!
+//! Reading symbols from target/thumbv7em-none-eabihf/debug/cortex-m-quickstart...done.
+//! cortex_m_rt::reset_handler ()
+//!     at $REGISTRY/cortex-m-rt-0.3.12/src/lib.rs:330
+//! 330     unsafe extern "C" fn reset_handler() -> ! {
+//! semihosting is enabled
+//! Ignoring packet error, continuing...
+//! Ignoring packet error, continuing...
+//! ```
+//!
+//! Note that when you reach this point OpenOCD will become unresponsive and you'll have to kill it
+//! and start a new OpenOCD process before you can invoke `xargo run` / start GDB.
+//!
+//! Cause: You uncommented the `monitor tpiu ..` line in `.gdbinit` and are using a named pipe to
+//! receive the ITM data (i.e. you ran `mkfifo itm.fifo`). This error occurs when `itmdump -f
+//! itm.fifo` (or equivalent, e.g. `cat itm.fifo`) is not running.
+//!
+//! Solution: Run `itmdump -f itm.fifo` (or equivalently `cat itm.fifo`) *before* invoking `xargo
+//! run` / starting GDB. Note that sometimes `itmdump` will exit when the GDB session ends. In that
+//! case you'll have to run `itmdump` before you start the next GDB session.
+//!
+//! Alternative solution: Use a plain text file instead of a named pipe. In this scenario you omit
+//! the `mkfifo itm.dump` command. You can use `itmdump`'s *follow* mode (-F) to get named pipe like
+//! output.
 
 #![no_std]
 
