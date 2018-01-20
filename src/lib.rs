@@ -3,22 +3,22 @@
 //! # Dependencies
 //!
 //! - Nightly Rust toolchain: `rustup default nightly`
-//! - ARM linker: `sudo apt-get install binutils-arm-none-eabi`
+//! - ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
-//! - GDB: `sudo apt-get install gdb-arm-none-eabi`
-//! - OpenOCD: `sudo apt-get install OpenOCD`
+//! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
+//! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
 //! - Xargo: `cargo install xargo`
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
 //!
-//! - Clone this crate
+//! 1) Clone this crate
 //!
 //! ``` text
 //! $ cargo clone cortex-m-quickstart && cd $_
 //! ```
 //!
-//! - Change the crate name, author and version
+//! 2) Change the crate name, author and version
 //!
 //! ``` text
 //! $ edit Cargo.toml && head $_
@@ -28,11 +28,11 @@
 //! version = "0.1.0"
 //! ```
 //!
-//! - Specify the memory layout of the target device
+//! 3) Specify the memory layout of the target device
 //!
-//! (Note that some board support crates may provide this file for you (check
-//! the crate documentation). If you are using one that does that then remove
-//! *both* the `memory.x` and `build.rs` files.)
+//! **NOTE** board support crates sometimes provide this file for you (check the crate
+//! documentation). If you are using one that does then remove *both* the `memory.x` and `build.rs`
+//! files.
 //!
 //! ``` text
 //! $ edit memory.x && cat $_
@@ -44,7 +44,7 @@
 //! }
 //! ```
 //!
-//! - Optionally, set a default build target
+//! 4) Optionally, set a default build target
 //!
 //! ``` text
 //! $ cat >>.cargo/config <<'EOF'
@@ -53,35 +53,32 @@
 //! EOF
 //! ```
 //!
-//! - Very likely, depend on a device or a BSP (Board Support Package) crate.
+//! 5) Depend on a device, HAL implementation or a board support crate.
 //!
 //! ``` text
-//! # add a device crate, or
-//! $ cargo add stm32f103xx
+//! $ # add a device crate, OR
+//! $ cargo add stm32f30x
 //!
-//! # add a board support crate
-//! $ cargo add blue-pill --git https://github.com/japaric/blue-pill
+//! $ # add a HAL implementation crate, OR
+//! $ cargo add stm32f103xx-hal
+//!
+//! $ # add a board support crate
+//! $ cargo add f3
 //! ```
 //!
-//! - Write the application or start from one of the examples
+//! 6) Write the application or start from one of the examples
 //!
 //! ``` text
 //! $ rm -r src/* && cp examples/hello.rs src/main.rs
 //! ```
 //!
-//! - Disable incremental compilation. It doesn't work for embedded development.
-//!   You'll hit nonsensical linker errors if you use it.
+//! 7) Build the application
 //!
 //! ``` text
-//! $ unset CARGO_INCREMENTAL
-//! ```
-//!
-//! - Build the application
-//!
-//! ``` text
-//! # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
+//! $ # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
 //! $ xargo build --release
 //!
+//! $ # sanity check
 //! $ arm-none-eabi-readelf -A target/thumbv7em-none-eabihf/release/demo
 //! Attribute Section: aeabi
 //! File Attributes
@@ -104,22 +101,21 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
-//! - Flash the program
+//! 8) Flash the program
 //!
 //! ``` text
-//! # Launch OpenOCD on a terminal
+//! $ # Launch OpenOCD on a terminal
 //! $ openocd -f (..)
 //! ```
 //!
 //! ``` text
-//! # Start a debug session in another terminal
-//! $ arm-none-eabi-gdb target/..
+//! $ # Start a debug session in another terminal
+//! $ arm-none-eabi-gdb target/thumbv7em-none-eabihf/release/demo
 //! ```
 //!
-//! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you
-//! can simply run `cargo run` or `cargo run --example $example` to build the
-//! program, and immediately start a debug session. IOW, it lets you omit the
-//! `arm-none-eabi-gdb` command.
+//! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you can simply run `xargo
+//! run` or `xargo run --example $example` to build the program, *and* immediately start a debug
+//! session. IOW, it lets you omit the `arm-none-eabi-gdb` command.
 //!
 //! ``` text
 //! $ cargo run --example hello
@@ -261,30 +257,6 @@
 //! ```
 //!
 //! Solution: Switch to the nightly toolchain with `rustup default nightly`.
-//!
-//! ## Used `CARGO_INCREMENTAL=1`
-//!
-//! Error message:
-//!
-//! ``` text
-//! $ xargo build
-//! error: linking with `arm-none-eabi-ld` failed: exit code: 1
-//!     |
-//! = note: "arm-none-eabi-ld" (..)
-//!     = note: arm-none-eabi-ld:
-//! You must specify the exception handlers.
-//!     Create a non `pub` static variable with type
-//!     `cortex_m::exception::Handlers` and place it in the
-//!     '.rodata.exceptions' section. (cf. #[link_section]). Apply the
-//!     `#[used]` attribute to the variable to make it reach the linker.
-//!     arm-none-eabi-ld:
-//! Invalid '.rodata.exceptions' section.
-//!     Make sure to place a static with type `cortex_m::exception::Handlers`
-//!     in that section (cf. #[link_section]) ONLY ONCE.
-//! ```
-//!
-//! Solution: `$ unset CARGO_INCREMENAL`. And to be on the safe side, call
-//! `cargo clean` and thrash the Xargo sysroot: `$ rm -rf ~/.xargo`
 //!
 //! ## Used `gdb` instead of `arm-none-eabi-gdb`
 //!
