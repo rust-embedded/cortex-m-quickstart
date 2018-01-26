@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.4] - 2018-01-26
+
+### Changed
+
+- Disable ThinLTO which causes extreme binary size bloat. See rust-lang/rust#47770 for details.
+
 ## [v0.2.3] - 2018-01-20
 
 ### Changed
@@ -121,7 +127,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.4...HEAD
+[v0.2.4]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.0...v0.2.1

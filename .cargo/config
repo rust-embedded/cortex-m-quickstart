@@ -4,6 +4,7 @@ rustflags = [
   "-C", "link-arg=-Tlink.x",
   "-C", "linker=arm-none-eabi-ld",
   "-Z", "linker-flavor=ld",
+  "-Z", "thinlto=no",
 ]
 
 [target.thumbv7m-none-eabi]
@@ -12,6 +13,7 @@ rustflags = [
   "-C", "link-arg=-Tlink.x",
   "-C", "linker=arm-none-eabi-ld",
   "-Z", "linker-flavor=ld",
+  "-Z", "thinlto=no",
 ]
 
 [target.thumbv7em-none-eabi]
@@ -20,6 +22,7 @@ rustflags = [
   "-C", "link-arg=-Tlink.x",
   "-C", "linker=arm-none-eabi-ld",
   "-Z", "linker-flavor=ld",
+  "-Z", "thinlto=no",
 ]
 
 [target.thumbv7em-none-eabihf]
@@ -28,4 +31,5 @@ rustflags = [
   "-C", "link-arg=-Tlink.x",
   "-C", "linker=arm-none-eabi-ld",
   "-Z", "linker-flavor=ld",
+  "-Z", "thinlto=no",
 ]
