@@ -20,14 +20,13 @@
 extern crate cortex_m;
 extern crate cortex_m_rt;
 
-use cortex_m::{asm, interrupt, peripheral};
+use cortex_m::{asm, Peripherals};
 
 fn main() {
-    interrupt::free(|cs| {
-        let itm = peripheral::ITM.borrow(&cs);
+    let p = Peripherals::take().unwrap();
+    let mut itm = p.ITM;
 
-        iprintln!(&itm.stim[0], "Hello, world!");
-    });
+    iprintln!(&mut itm.stim[0], "Hello, world!");
 }
 
 // As we are not using interrupts, we just register a dummy catch all handler

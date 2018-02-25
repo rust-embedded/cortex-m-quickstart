@@ -19,7 +19,7 @@
 //! $ edit Cargo.toml && cat $_
 //! [dependencies.stm32f103xx]
 //! features = ["rt"]
-//! version = "0.7.0"
+//! version = "0.8.0"
 //! ```
 //!
 //! ---
@@ -39,24 +39,29 @@
 //! use core::fmt::Write;
 //! 
 //! use cortex_m::interrupt::{self, Mutex};
-//! use cortex_m::peripheral::SystClkSource;
+//! use cortex_m::peripheral::syst::SystClkSource;
 //! use cortex_m_semihosting::hio::{self, HStdout};
 //! use stm32f103xx::Interrupt;
 //! 
 //! static HSTDOUT: Mutex<RefCell<Option<HStdout>>> =
 //!     Mutex::new(RefCell::new(None));
 //! 
+//! static NVIC: Mutex<RefCell<Option<cortex_m::peripheral::NVIC>>> =
+//!     Mutex::new(RefCell::new(None));
+//! 
 //! fn main() {
+//!     let global_p = cortex_m::Peripherals::take().unwrap();
 //!     interrupt::free(|cs| {
 //!         let hstdout = HSTDOUT.borrow(cs);
 //!         if let Ok(fd) = hio::hstdout() {
 //!             *hstdout.borrow_mut() = Some(fd);
 //!         }
 //! 
-//!         let nvic = stm32f103xx::NVIC.borrow(cs);
+//!         let mut nvic = global_p.NVIC;
 //!         nvic.enable(Interrupt::TIM2);
+//!         *NVIC.borrow(cs).borrow_mut() = Some(nvic);
 //! 
-//!         let syst = stm32f103xx::SYST.borrow(cs);
+//!         let mut syst = global_p.SYST;
 //!         syst.set_clock_source(SystClkSource::Core);
 //!         syst.set_reload(8_000_000); // 1s
 //!         syst.enable_counter();
@@ -73,9 +78,9 @@
 //!             writeln!(*hstdout, "Tick").ok();
 //!         }
 //! 
-//!         let nvic = stm32f103xx::NVIC.borrow(cs);
-//! 
-//!         nvic.set_pending(Interrupt::TIM2);
+//!         if let Some(nvic) = NVIC.borrow(cs).borrow_mut().as_mut() {
+//!             nvic.set_pending(Interrupt::TIM2);
+//!         }
 //!     });
 //! }
 //! 
