@@ -31,7 +31,7 @@
 //! 
 //! #[lang = "panic_fmt"]
 //! #[no_mangle]
-//! unsafe extern "C" fn rust_begin_unwind(
+//! pub unsafe extern "C" fn rust_begin_unwind(
 //!     args: core::fmt::Arguments,
 //!     file: &'static str,
 //!     line: u32,
@@ -42,7 +42,7 @@
 //!             .and_then(|_| {
 //!                 stdout
 //!                     .write_fmt(args)
-//!                     .and_then(|_| writeln!(stdout, "', {}:{}", file, line))
+//!                     .and_then(|_| writeln!(stdout, "', {}:{}:{}", file, line, col))
 //!             })
 //!             .ok();
 //!     }

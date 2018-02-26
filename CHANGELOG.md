@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.5] - 2018-02-26
+
+### Added
+
+- Comments to Cargo.toml and Xargo.toml to make it easier to try the examples.
+
+### Fixed
+
+- The `allocator` example to use the `#[global_allocator]` feature.
+
 ## [v0.2.4] - 2018-01-26
 
 ### Changed
