@@ -29,7 +29,6 @@
 #![feature(used)]
 #![feature(global_allocator)]
 #![no_std]
-#[allow(deprecated)]
 
 // This is the allocator crate; you can use a different one
 extern crate alloc_cortex_m;
