@@ -9,12 +9,22 @@ repository = "https://github.com/japaric/cortex-m-quickstart"
 version = "0.2.4"
 
 [dependencies]
-cortex-m = "0.3.0"
+cortex-m = "0.4.0"
 cortex-m-semihosting = "0.2.0"
+# alloc-cortex-m release doesn't use linked_list_allocator v0.5.0 yet.
+# Uncomment for the allocator example.
+#alloc-cortex-m = { git = "https://github.com/japaric/alloc-cortex-m.git" }
+
 
 [dependencies.cortex-m-rt]
-features = ["abort-on-panic"]
 version = "0.3.12"
+# Comment for the panic example.
+features = ["abort-on-panic"]
+
+# Uncomment for the device example.
+# [dependencies.stm32f103xx]
+# features = ["rt"]
+# version = "0.8.0"
 
 # disable both incremental compilation and parallel codegen to reduce the chances of running into
 # rust-lang/rust#47074

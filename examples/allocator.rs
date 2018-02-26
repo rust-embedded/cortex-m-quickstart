@@ -1,6 +1,6 @@
 //! How to use the heap and a dynamic memory allocator
 //!
-//! To compile this example you'll need to build the collections crate as part
+//! To compile this example you'll need to build the alloc crate as part
 //! of the Xargo sysroot. To do that change the Xargo.toml file to look like
 //! this:
 //!
@@ -8,7 +8,7 @@
 //! [dependencies.core]
 //! stage = 0
 //!
-//! [dependencies.collections] # NEW
+//! [dependencies.alloc] # NEW
 //! stage = 0
 //!
 //! [dependencies.compiler_builtins]
@@ -25,15 +25,16 @@
 //!
 //! ---
 
-#[allow(deprecated)]
-#![feature(collections)]
+#![feature(alloc)]
 #![feature(used)]
+#![feature(global_allocator)]
 #![no_std]
+#[allow(deprecated)]
 
 // This is the allocator crate; you can use a different one
 extern crate alloc_cortex_m;
 #[macro_use]
-extern crate collections;
+extern crate alloc;
 extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate cortex_m_semihosting;
@@ -42,25 +43,21 @@ use core::fmt::Write;
 
 use cortex_m::asm;
 use cortex_m_semihosting::hio;
+use alloc_cortex_m::CortexMHeap;
+
+#[global_allocator]
+static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
+
+extern "C" {
+    static mut _sheap: u32;
+    static mut _eheap: u32;
+}
 
 fn main() {
     // Initialize the allocator
-    unsafe {
-        extern "C" {
-            // Start of the heap
-            static mut _sheap: usize;
-        }
-
-        // Size of the heap in words (1 word = 4 bytes)
-        // NOTE The bigger the heap the greater the chance to run into a stack
-        // overflow (collision between the stack and the heap)
-        const SIZE: isize = 256;
-
-        // End of the heap
-        let _eheap = (&mut _sheap as *mut _).offset(SIZE);
-
-        alloc_cortex_m::init(&mut _sheap, _eheap);
-    }
+    let start = unsafe { &mut _sheap as *mut u32 as usize };
+    let end = unsafe { &mut _sheap as *mut u32 as usize };
+    unsafe { ALLOCATOR.init(start, end - start) }
 
     // Growable array allocated on the heap
     let xs = vec![0, 1, 2];
