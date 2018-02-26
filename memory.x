@@ -18,3 +18,6 @@ MEMORY
 /* This is required only on microcontrollers that store some configuration right
    after the vector table */
 /* _stext = ORIGIN(FLASH) + 0x400; */
+
+/* Size of the heap (in bytes) */
+/* _heap_size = 1024; */

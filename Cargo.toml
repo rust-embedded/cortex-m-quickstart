@@ -15,7 +15,6 @@ cortex-m-semihosting = "0.2.0"
 # Uncomment for the allocator example.
 #alloc-cortex-m = "0.3.2"
 
-
 [dependencies.cortex-m-rt]
 version = "0.3.12"
 # Comment for the panic example.

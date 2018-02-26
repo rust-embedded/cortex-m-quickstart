@@ -55,7 +55,7 @@ extern "C" {
 fn main() {
     // Initialize the allocator
     let start = unsafe { &mut _sheap as *mut u32 as usize };
-    let end = unsafe { &mut _sheap as *mut u32 as usize };
+    let end = unsafe { &mut _eheap as *mut u32 as usize };
     unsafe { ALLOCATOR.init(start, end - start) }
 
     // Growable array allocated on the heap
