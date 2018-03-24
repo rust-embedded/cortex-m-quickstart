@@ -53,33 +53,30 @@
 //! EOF
 //! ```
 //!
-//! 5) Depend on a device, HAL implementation or a board support crate.
+//! 5) Depending on the device, add HAL implementation or a board support crate.
+//! `cargo add` comes from the `cargo-edit` binary, you can install it with
+//! `cargo install cargo-edit`.
 //!
 //! ``` text
 //! $ # add a device crate, OR
 //! $ cargo add stm32f30x
 //!
 //! $ # add a HAL implementation crate, OR
-//! $ cargo add stm32f103xx-hal
+//! $ cargo add stm32f30x-hal
 //!
 //! $ # add a board support crate
 //! $ cargo add f3
 //! ```
 //!
-//! 6) Write the application or start from one of the examples
 //!
-//! ``` text
-//! $ rm -r src/* && cp examples/hello.rs src/main.rs
-//! ```
-//!
-//! 7) Build the application
+//! 6) Build the `examples/hello.rs` application
 //!
 //! ``` text
 //! $ # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
-//! $ xargo build --release
+//! $ xargo build --example hello
 //!
 //! $ # sanity check
-//! $ arm-none-eabi-readelf -A target/thumbv7em-none-eabihf/release/demo
+//! $ arm-none-eabi-readelf -A target/thumbv7em-none-eabihf/debug/examples/hello
 //! Attribute Section: aeabi
 //! File Attributes
 //!   Tag_conformance: "2.09"
@@ -95,22 +92,37 @@
 //!   Tag_ABI_align_preserved: 8-byte, except leaf SP
 //!   Tag_ABI_HardFP_use: SP only
 //!   Tag_ABI_VFP_args: VFP registers
-//!   Tag_ABI_optimization_goals: Aggressive Speed
+//!   Tag_ABI_optimization_goals: Prefer Debug
 //!   Tag_CPU_unaligned_access: v6
 //!   Tag_FP_HP_extension: Allowed
 //!   Tag_ABI_FP_16bit_format: IEEE 754
+//! ```
+//!
+//! 7) Update udev rules to access USB device from openocd as non-root user
+//!
+//! ``` text
+//! $ # Determine your board's USB vendor and product id
+//! $ lsusb | grep ST-LINK
+//! Bus 001 Device 009: ID 0483:3748 STMicroelectronics ST-LINK/V2
+//!
+//! $ # Add a new udev rule and apply it
+//! $ echo 'ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE="0666", GROUP="plugdev"' | sudo tee -a /etc/udev/rules.d/99-stlink.rules
+//! $ sudo udevadm control --reload-rules
 //! ```
 //!
 //! 8) Flash the program
 //!
 //! ``` text
 //! $ # Launch OpenOCD on a terminal
-//! $ openocd -f (..)
+//! $ openocd -f interface/stlink-v2.cfg -f target/stm32f3x_stlink.cfg
 //! ```
 //!
 //! ``` text
-//! $ # Start a debug session in another terminal
-//! $ arm-none-eabi-gdb target/thumbv7em-none-eabihf/release/demo
+//! $ # In another terminal, enable safe loading of .gdbinit scripts
+//! $ echo 'set auto-load safe-path /' >> ~/.gdbinit
+//!
+//! $ # Start a debug session in this second terminal
+//! $ arm-none-eabi-gdb target/thumbv7em-none-eabihf/debug/examples/hello
 //! ```
 //!
 //! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you can simply run `xargo
@@ -118,8 +130,20 @@
 //! session. IOW, it lets you omit the `arm-none-eabi-gdb` command.
 //!
 //! ``` text
-//! $ cargo run --example hello
+//! $ xargo run --example hello
 //! > # drops you into a GDB session
+//! (gdb) tbreak hello::main
+//! Temporary breakpoint 1 at 0x8000f82: file examples/hello.rs, line 18.
+//! (gdb) continue
+//! Continuing.
+//!
+//! Temporary breakpoint 1, hello::main () at examples/hello.rs:18
+//! 18	    let mut stdout = hio::hstdout().unwrap();
+//! (gdb) next
+//! 19	    writeln!(stdout, "Hello, world!").unwrap();
+//! (gdb) next
+//! # Observe "Hello, world!" output in the OpenOCD terminal
+//! (gdb) quit
 //! ```
 //!
 //! # Examples
@@ -228,6 +252,12 @@
 //! Solution: Correct the OpenOCD arguments. Check the
 //! `/usr/share/openocd/scripts` directory (exact location varies per
 //! distribution / OS) for a list of scripts that can be used.
+//!
+//! Solution: Verify that you have a udev rule setup for your device's USB
+//! vendor and product id (see `lsusb | grep ST-LINK` and udev example above).
+//!
+//! Solution: Ensure you are passing the correct version of stlink to openocd,
+//! try `interface/stlink-v2.cfg` as well as `interface/stlink-v2-1.cfg`.
 //!
 //! ## Used Cargo instead of Xargo
 //!
