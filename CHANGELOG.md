@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.6] - 2018-04-09
+
+### Changed
+
+- The documentation to instruct the user to use Cargo instead of Xargo
+
 ## [v0.2.5] - 2018-02-26
 
 ### Added
@@ -137,7 +143,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.6...HEAD
+[v0.2.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.5...v0.2.6
+[v0.2.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.4...v0.2.5
 [v0.2.4]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.1...v0.2.2
