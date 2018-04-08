@@ -1,20 +1,5 @@
 //! How to use the heap and a dynamic memory allocator
 //!
-//! To compile this example you'll need to build the alloc crate as part
-//! of the Xargo sysroot. To do that change the Xargo.toml file to look like
-//! this:
-//!
-//! ``` text
-//! [dependencies.core]
-//! stage = 0
-//!
-//! [dependencies.alloc] # NEW
-//! stage = 0
-//!
-//! [dependencies.compiler_builtins]
-//! stage = 1
-//! ```
-//!
 //! This example depends on the alloc-cortex-m crate so you'll have to add it
 //! to your Cargo.toml:
 //!
