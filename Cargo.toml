@@ -6,7 +6,7 @@ keywords = ["arm", "cortex-m", "template"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-quickstart"
 repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.2.5"
+version = "0.2.6"
 
 [dependencies]
 cortex-m = "0.4.0"
@@ -16,7 +16,7 @@ cortex-m-semihosting = "0.2.0"
 #alloc-cortex-m = "0.3.2"
 
 [dependencies.cortex-m-rt]
-version = "0.3.12"
+version = "0.3.15"
 # Comment for the panic example.
 features = ["abort-on-panic"]
 
@@ -24,12 +24,6 @@ features = ["abort-on-panic"]
 # [dependencies.stm32f103xx]
 # features = ["rt"]
 # version = "0.8.0"
-
-# disable both incremental compilation and parallel codegen to reduce the chances of running into
-# rust-lang/rust#47074
-[profile.dev]
-codegen-units = 1
-incremental = false
 
 [profile.release]
 debug = true

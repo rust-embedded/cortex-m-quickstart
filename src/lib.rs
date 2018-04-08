@@ -2,23 +2,35 @@
 //!
 //! # Dependencies
 //!
-//! - Nightly Rust toolchain: `rustup default nightly`
+//! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
-//! - Xargo: `cargo install xargo`
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
 //!
-//! 1) Clone this crate
+//! 0) Figure out the cross compilation *target* to use.
+//!
+//! - Use `thumbv6m-none-eabi` for ARM Cortex-M0 and Cortex-M0+
+//! - Use `thumbv7m-none-eabi` for ARM Cortex-M3
+//! - Use `thumbv7em-none-eabi` for ARM Cortex-M4 and Cortex-M7 (*no* FPU support)
+//! - Use `thumbv7em-none-eabihf` for ARM Cortex-M4**F** and Cortex-M7**F** (*with* FPU support)
+//!
+//! 1) Install the `rust-std` component for your target, if you haven't done so already
+//!
+//! ``` console
+//! $ rustup target add thumbv7em-none-eabihf
+//! ```
+//!
+//! 2) Clone this crate
 //!
 //! ``` text
 //! $ cargo clone cortex-m-quickstart && cd $_
 //! ```
 //!
-//! 2) Change the crate name, author and version
+//! 3) Change the crate name, author and version
 //!
 //! ``` text
 //! $ edit Cargo.toml && head $_
@@ -28,7 +40,7 @@
 //! version = "0.1.0"
 //! ```
 //!
-//! 3) Specify the memory layout of the target device
+//! 4) Specify the memory layout of the target device
 //!
 //! **NOTE** board support crates sometimes provide this file for you (check the crate
 //! documentation). If you are using one that does then remove *both* the `memory.x` and `build.rs`
@@ -44,7 +56,7 @@
 //! }
 //! ```
 //!
-//! 4) Optionally, set a default build target
+//! 5) Optionally, set a default build target
 //!
 //! ``` text
 //! $ cat >>.cargo/config <<'EOF'
@@ -53,30 +65,30 @@
 //! EOF
 //! ```
 //!
-//! 5) Depend on a device, HAL implementation or a board support crate.
+//! 6) Optionally, depend on a device, HAL implementation or a board support crate.
 //!
 //! ``` text
 //! $ # add a device crate, OR
 //! $ cargo add stm32f30x
 //!
 //! $ # add a HAL implementation crate, OR
-//! $ cargo add stm32f103xx-hal
+//! $ cargo add stm32f30x-hal
 //!
 //! $ # add a board support crate
 //! $ cargo add f3
 //! ```
 //!
-//! 6) Write the application or start from one of the examples
+//! 7) Write the application or start from one of the examples
 //!
 //! ``` text
 //! $ rm -r src/* && cp examples/hello.rs src/main.rs
 //! ```
 //!
-//! 7) Build the application
+//! 8) Build the application
 //!
 //! ``` text
 //! $ # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
-//! $ xargo build --release
+//! $ cargo build --release
 //!
 //! $ # sanity check
 //! $ arm-none-eabi-readelf -A target/thumbv7em-none-eabihf/release/demo
@@ -101,7 +113,7 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
-//! 8) Flash the program
+//! 9) Flash the program
 //!
 //! ``` text
 //! $ # Launch OpenOCD on a terminal
@@ -113,9 +125,7 @@
 //! $ arm-none-eabi-gdb target/thumbv7em-none-eabihf/release/demo
 //! ```
 //!
-//! **NOTE** As of nightly-2017-05-14 or so and cortex-m-quickstart v0.1.6 you can simply run `xargo
-//! run` or `xargo run --example $example` to build the program, *and* immediately start a debug
-//! session. IOW, it lets you omit the `arm-none-eabi-gdb` command.
+//! Alternatively, you can use `cargo run` to build, flash and debug the program in a single step.
 //!
 //! ``` text
 //! $ cargo run --example hello
@@ -151,7 +161,7 @@
 //! Error message:
 //!
 //! ``` text
-//! $ xargo build
+//! $ cargo build
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //! |
@@ -172,7 +182,7 @@
 //! Error message:
 //!
 //! ``` text
-//! $ xargo build
+//! $ cargo build
 //! (..)
 //! Compiling cortex-m-semihosting v0.1.3
 //! error[E0463]: can't find crate for `std`
@@ -181,8 +191,8 @@
 //! ```
 //!
 //! Solution: Set a default build target in the `.cargo/config` file
-//! (see [Usage] section), or call Xargo with `--target` flag:
-//! `xargo build --target thumbv7em-none-eabi`.
+//! (see [Usage] section), or call Cargo with `--target` flag:
+//! `cargo build --target thumbv7em-none-eabi`.
 //!
 //! ## Overwrote the original `.cargo/config` file
 //!
@@ -229,7 +239,7 @@
 //! `/usr/share/openocd/scripts` directory (exact location varies per
 //! distribution / OS) for a list of scripts that can be used.
 //!
-//! ## Used Cargo instead of Xargo
+//! ## Used an old nightly
 //!
 //! Error message:
 //!
@@ -243,14 +253,14 @@
 //! error: aborting due to previous error
 //! ```
 //!
-//! Solution: Use `xargo build`.
+//! Solution: Use a more recent nightly
 //!
 //! ## Used the stable toolchain
 //!
 //! Error message:
 //!
 //! ``` text
-//! $ xargo build
+//! $ cargo build
 //! error: failed to run `rustc` to learn about target-specific information
 //!
 //! To learn more, run the command again with --verbose.
@@ -288,7 +298,7 @@
 //! Error message:
 //!
 //! ``` text
-//! $ xargo run [--example ..]
+//! $ cargo run [--example ..]
 //!
 //! Reading symbols from target/thumbv7em-none-eabihf/debug/cortex-m-quickstart...done.
 //! cortex_m_rt::reset_handler ()
@@ -300,13 +310,13 @@
 //! ```
 //!
 //! Note that when you reach this point OpenOCD will become unresponsive and you'll have to kill it
-//! and start a new OpenOCD process before you can invoke `xargo run` / start GDB.
+//! and start a new OpenOCD process before you can invoke `cargo run` / start GDB.
 //!
 //! Cause: You uncommented the `monitor tpiu ..` line in `.gdbinit` and are using a named pipe to
 //! receive the ITM data (i.e. you ran `mkfifo itm.fifo`). This error occurs when `itmdump -f
 //! itm.fifo` (or equivalent, e.g. `cat itm.fifo`) is not running.
 //!
-//! Solution: Run `itmdump -f itm.fifo` (or equivalently `cat itm.fifo`) *before* invoking `xargo
+//! Solution: Run `itmdump -f itm.fifo` (or equivalently `cat itm.fifo`) *before* invoking `cargo
 //! run` / starting GDB. Note that sometimes `itmdump` will exit when the GDB session ends. In that
 //! case you'll have to run `itmdump` before you start the next GDB session.
 //!
