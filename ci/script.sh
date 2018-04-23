@@ -17,9 +17,7 @@ EOF
 
     local examples=(
         crash
-        # device
         hello
-        itm
         override-exception-handler
         panic
     )
@@ -28,13 +26,29 @@ EOF
         cargo build --target $TARGET --example $ex --release
     done
 
-    cargo add alloc-cortex-m
+    # ITM is not available on Cortex-M0
+    if [ $TARGET != thumbv6m-none-eabi ]; then
+        local ex=itm
+        cargo build --target $TARGET --example $ex
+        cargo build --target $TARGET --example $ex --release
 
-    cargo build --target $TARGET --example allocator
-    cargo build --target $TARGET --example allocator --release
+        examples+=( $ex )
 
-    examples+=( allocator )
+    fi
 
+    # Allocator example needs an extra dependency
+    cat >>Cargo.toml <<'EOF'
+[dependencies.alloc-cortex-m]
+version = "0.3.3"
+EOF
+
+    local ex=allocator
+    cargo build --target $TARGET --example $ex
+    cargo build --target $TARGET --example $ex --release
+
+    examples+=( $ex )
+
+    # Device example needs an extra dependency
     if [ $TARGET = thumbv7m-none-eabi ]; then
         cat >>Cargo.toml <<'EOF'
 [dependencies.stm32f103xx]
@@ -42,10 +56,11 @@ features = ["rt"]
 version = "0.9.0"
 EOF
 
-        cargo build --target $TARGET --example device
-        cargo build --target $TARGET --example device --release
+        local ex=device
+        cargo build --target $TARGET --example $ex
+        cargo build --target $TARGET --example $ex --release
 
-        examples+=( device )
+        examples+=( $ex )
     fi
 
     IFS=,;eval arm-none-eabi-size target/$TARGET/release/examples/"{${examples[*]}}"

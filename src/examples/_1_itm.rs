@@ -20,7 +20,7 @@
 //! #[macro_use]
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
-//! extern crate panic_itm; // panicking behavior
+//! extern crate panic_abort; // panicking behavior
 //! 
 //! use cortex_m::{asm, Peripherals};
 //! 
@@ -29,9 +29,6 @@
 //!     let mut itm = p.ITM;
 //! 
 //!     iprintln!(&mut itm.stim[0], "Hello, world!");
-//! 
-//!     // Also prints the panic message to the ITM
-//!     panic!("Oops");
 //! }
 //! 
 //! // As we are not using interrupts, we just register a dummy catch all handler
