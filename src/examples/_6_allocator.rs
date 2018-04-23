@@ -1,7 +1,6 @@
 //! How to use the heap and a dynamic memory allocator
 //!
-//! This example depends on the alloc-cortex-m crate so you'll have to add it
-//! to your Cargo.toml:
+//! This example depends on the alloc-cortex-m crate so you'll have to add it to your Cargo.toml:
 //!
 //! ``` text
 //! # or edit the Cargo.toml file manually
@@ -13,8 +12,8 @@
 //! ```
 //! 
 //! #![feature(alloc)]
-//! #![feature(used)]
 //! #![feature(global_allocator)]
+//! #![feature(used)]
 //! #![no_std]
 //! 
 //! // This is the allocator crate; you can use a different one
@@ -24,26 +23,27 @@
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
 //! extern crate cortex_m_semihosting;
+//! extern crate panic_abort; // panicking behavior
 //! 
 //! use core::fmt::Write;
 //! 
+//! use alloc_cortex_m::CortexMHeap;
 //! use cortex_m::asm;
 //! use cortex_m_semihosting::hio;
-//! use alloc_cortex_m::CortexMHeap;
 //! 
 //! #[global_allocator]
 //! static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 //! 
 //! extern "C" {
 //!     static mut _sheap: u32;
-//!     static mut _eheap: u32;
 //! }
+//! 
+//! const HEAP_SIZE: usize = 1024; // in bytes
 //! 
 //! fn main() {
 //!     // Initialize the allocator
 //!     let start = unsafe { &mut _sheap as *mut u32 as usize };
-//!     let end = unsafe { &mut _eheap as *mut u32 as usize };
-//!     unsafe { ALLOCATOR.init(start, end - start) }
+//!     unsafe { ALLOCATOR.init(start, HEAP_SIZE) }
 //! 
 //!     // Growable array allocated on the heap
 //!     let xs = vec![0, 1, 2];

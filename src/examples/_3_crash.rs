@@ -1,12 +1,11 @@
 //! Debugging a crash (exception)
 //!
-//! The `cortex-m-rt` crate provides functionality for this through a default
-//! exception handler. When an exception is hit, the default handler will
-//! trigger a breakpoint and in this debugging context the stacked registers
-//! are accessible.
+//! The `cortex-m-rt` crate provides functionality for this through a default exception handler.
+//! When an exception is hit, the default handler will trigger a breakpoint and in this debugging
+//! context the stacked registers are accessible.
 //!
-//! In you run the example below, you'll be able to inspect the state of your
-//! program under the debugger using these commands:
+//! In you run the example below, you'll be able to inspect the state of your program under the
+//! debugger using these commands:
 //!
 //! ``` text
 //! (gdb) # Exception frame = program state during the crash
@@ -65,6 +64,7 @@
 //! 
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
+//! extern crate panic_abort; // panicking behavior
 //! 
 //! use core::ptr;
 //! 

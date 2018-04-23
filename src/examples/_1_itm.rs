@@ -1,15 +1,14 @@
 //! Sends "Hello, world!" through the ITM port 0
 //!
-//! **IMPORTANT** Not all Cortex-M chips support ITM. You'll have to connect the
-//! microcontroller's SWO pin to the SWD interface. Note that some development
-//! boards don't provide this option.
+//! **IMPORTANT** Not all Cortex-M chips support ITM. You'll have to connect the microcontroller's
+//! SWO pin to the SWD interface. Note that some development boards don't provide this option.
 //!
 //! ITM is much faster than semihosting. Like 4 orders of magnitude or so.
 //!
-//! You'll need [`itmdump`] to receive the message on the host plus you'll need
-//! to uncomment the `monitor` commands in the `.gdbinit` file.
+//! You'll need [`itmdump`] to receive the message on the host plus you'll need to uncomment the
+//! `monitor` commands in the `.gdbinit` file.
 //!
-//! [`itmdump`]: https://docs.rs/itm/0.1.1/itm/
+//! [`itmdump`]: https://docs.rs/itm/0.2.1/itm/
 //!
 //! ---
 //!
@@ -21,6 +20,7 @@
 //! #[macro_use]
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
+//! extern crate panic_itm; // panicking behavior
 //! 
 //! use cortex_m::{asm, Peripherals};
 //! 
@@ -29,6 +29,9 @@
 //!     let mut itm = p.ITM;
 //! 
 //!     iprintln!(&mut itm.stim[0], "Hello, world!");
+//! 
+//!     // Also prints the panic message to the ITM
+//!     panic!("Oops");
 //! }
 //! 
 //! // As we are not using interrupts, we just register a dummy catch all handler
