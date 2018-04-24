@@ -4,15 +4,39 @@ matrix:
   include:
     - env: TARGET=thumbv6m-none-eabi
       rust: nightly
+      addons:
+        apt:
+          sources:
+            - debian-sid
+          packages:
+            - binutils-arm-none-eabi
 
     - env: TARGET=thumbv7m-none-eabi
       rust: nightly
+      addons:
+        apt:
+          sources:
+            - debian-sid
+          packages:
+            - binutils-arm-none-eabi
 
     - env: TARGET=thumbv7em-none-eabi
       rust: nightly
+      addons:
+        apt:
+          sources:
+            - debian-sid
+          packages:
+            - binutils-arm-none-eabi
 
     - env: TARGET=thumbv7em-none-eabihf
       rust: nightly
+      addons:
+        apt:
+          sources:
+            - debian-sid
+          packages:
+            - binutils-arm-none-eabi
 
 before_install: set -e
 
