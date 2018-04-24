@@ -1,53 +1,26 @@
-//! Defining the panic handler
+//! Changing the panic handler
 //!
-//! The panic handler can be defined through the `panic_fmt` [language item][1].
-//! Make sure that the "abort-on-panic" feature of the cortex-m-rt crate is
-//! disabled to avoid redefining the language item.
+//! The easiest way to change the panic handler is to use a different [panic implementation
+//! crate][0].
 //!
-//! [1]: https://doc.rust-lang.org/unstable-book/language-features/lang-items.html
+//! [0]: https://crates.io/keywords/panic-impl
 //!
 //! ---
 //!
 //! ```
 //! 
-//! #![feature(core_intrinsics)]
-//! #![feature(lang_items)]
 //! #![feature(used)]
 //! #![no_std]
 //! 
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
-//! extern crate cortex_m_semihosting;
-//! 
-//! use core::fmt::Write;
-//! use core::intrinsics;
+//! // extern crate panic_abort;
+//! extern crate panic_semihosting; // reports panic messages to the host stderr using semihosting
 //! 
 //! use cortex_m::asm;
-//! use cortex_m_semihosting::hio;
 //! 
 //! fn main() {
 //!     panic!("Oops");
-//! }
-//! 
-//! #[lang = "panic_fmt"]
-//! #[no_mangle]
-//! pub unsafe extern "C" fn rust_begin_unwind(
-//!     args: core::fmt::Arguments,
-//!     file: &'static str,
-//!     line: u32,
-//!     col: u32,
-//! ) -> ! {
-//!     if let Ok(mut stdout) = hio::hstdout() {
-//!         write!(stdout, "panicked at '")
-//!             .and_then(|_| {
-//!                 stdout
-//!                     .write_fmt(args)
-//!                     .and_then(|_| writeln!(stdout, "', {}:{}:{}", file, line, col))
-//!             })
-//!             .ok();
-//!     }
-//! 
-//!     intrinsics::abort()
 //! }
 //! 
 //! // As we are not using interrupts, we just register a dummy catch all handler

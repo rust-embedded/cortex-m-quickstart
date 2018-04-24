@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.7] - 2018-04-24
+
+### Changed
+
+- Bumped the dependency of `cortex-m-rt` to v0.4.0.
+
 ## [v0.2.6] - 2018-04-09
 
 ### Changed
@@ -143,7 +149,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.7...HEAD
+[v0.2.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.6...v0.2.7
 [v0.2.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.5...v0.2.6
 [v0.2.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.4...v0.2.5
 [v0.2.4]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.3...v0.2.4

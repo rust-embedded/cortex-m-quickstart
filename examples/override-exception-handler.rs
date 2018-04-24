@@ -4,8 +4,7 @@
 //!
 //! [1]: https://docs.rs/cortex-m-rt/0.3.2/cortex_m_rt/macro.exception.html
 //!
-//! The default exception handler can be overridden using the
-//! [`default_handler!`][2] macro
+//! The default exception handler can be overridden using the [`default_handler!`][2] macro
 //!
 //! [2]: https://docs.rs/cortex-m-rt/0.3.2/cortex_m_rt/macro.default_handler.html
 //!
@@ -17,6 +16,7 @@
 extern crate cortex_m;
 #[macro_use(exception)]
 extern crate cortex_m_rt;
+extern crate panic_abort; // panicking behavior
 
 use core::ptr;
 

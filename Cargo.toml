@@ -6,25 +6,23 @@ keywords = ["arm", "cortex-m", "template"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-quickstart"
 repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.2.6"
+version = "0.2.7"
 
 [dependencies]
 cortex-m = "0.4.0"
+cortex-m-rt = "0.4.0"
 cortex-m-semihosting = "0.2.0"
-# alloc-cortex-m release doesn't use linked_list_allocator v0.5.0 yet.
+panic-abort = "0.1.1"
+panic-semihosting = "0.1.0"
 # Uncomment for the allocator example.
-#alloc-cortex-m = "0.3.2"
-
-[dependencies.cortex-m-rt]
-version = "0.3.15"
-# Comment for the panic example.
-features = ["abort-on-panic"]
+#alloc-cortex-m = "0.3.3"
 
 # Uncomment for the device example.
 # [dependencies.stm32f103xx]
 # features = ["rt"]
-# version = "0.8.0"
+# version = "0.9.0"
 
 [profile.release]
 debug = true
 lto = true
+opt-level = "s"

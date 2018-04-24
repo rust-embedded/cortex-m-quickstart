@@ -3,10 +3,10 @@
 //! # Dependencies
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
-//! - ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
+//! - [Optional] ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
@@ -47,13 +47,14 @@
 //! files.
 //!
 //! ``` text
-//! $ edit memory.x && cat $_
+//! $ cat >memory.x <<'EOF'
 //! MEMORY
 //! {
 //!   /* NOTE K = KiBi = 1024 bytes */
 //!   FLASH : ORIGIN = 0x08000000, LENGTH = 256K
 //!   RAM : ORIGIN = 0x20000000, LENGTH = 40K
 //! }
+//! EOF
 //! ```
 //!
 //! 5) Optionally, set a default build target
@@ -87,7 +88,6 @@
 //! 8) Build the application
 //!
 //! ``` text
-//! $ # NOTE this command requires `arm-none-eabi-ld` to be in $PATH
 //! $ cargo build --release
 //!
 //! $ # sanity check
@@ -111,6 +111,26 @@
 //!   Tag_CPU_unaligned_access: v6
 //!   Tag_FP_HP_extension: Allowed
 //!   Tag_ABI_FP_16bit_format: IEEE 754
+//! ```
+//!
+//! **NOTE** By default Cargo will use the LLD linker shipped with the Rust toolchain. If you
+//! encounter any linking error try to switch to the GNU linker by modifying the `.cargo/config`
+//! file as shown below:
+//!
+//! ``` text
+//!  runner = 'arm-none-eabi-gdb'
+//!  rustflags = [
+//!    "-C", "link-arg=-Tlink.x",
+//! -  "-C", "linker=lld",
+//! -  "-Z", "linker-flavor=ld.lld",
+//! -  # "-C", "linker=arm-none-eabi-ld",
+//! -  # "-Z", "linker-flavor=ld",
+//! +  # "-C", "linker=lld",
+//! +  # "-Z", "linker-flavor=ld.lld",
+//! +  "-C", "linker=arm-none-eabi-ld",
+//! +  "-Z", "linker-flavor=ld",
+//!    "-Z", "thinlto=no",
+//!  ]
 //! ```
 //!
 //! 9) Flash the program
@@ -165,7 +185,7 @@
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //! |
-//! = note: "arm-none-eabi-ld" "-L" (..)
+//! = note: "lld" "-L" (..)
 //! = note: arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
 //! arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
 //! arm-none-eabi-ld:
@@ -184,7 +204,7 @@
 //! ``` text
 //! $ cargo build
 //! (..)
-//! Compiling cortex-m-semihosting v0.1.3
+//! Compiling cortex-m-semihosting v0.2.0
 //! error[E0463]: can't find crate for `std`
 //!
 //! error: aborting due to previous error
