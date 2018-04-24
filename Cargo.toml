@@ -9,11 +9,13 @@ repository = "https://github.com/japaric/cortex-m-quickstart"
 version = "0.2.7"
 
 [dependencies]
-cortex-m = "0.4.0"
-cortex-m-rt = "0.4.0"
-cortex-m-semihosting = "0.2.0"
+# cortex-m = "0.4.0"
+# cortex-m-rt = "0.4.0"
+cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt", branch = "stable" }
+# cortex-m-semihosting = "0.2.0"
+# panic-loop = { path = "../panic-loop" }
 panic-abort = "0.1.1"
-panic-semihosting = "0.1.0"
+# panic-semihosting = "0.1.0"
 # Uncomment for the allocator example.
 #alloc-cortex-m = "0.3.3"
 
