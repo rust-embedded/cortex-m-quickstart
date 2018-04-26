@@ -9,7 +9,7 @@ extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt as rt;
 extern crate cortex_m_semihosting as sh;
-extern crate panic_abort; // panicking behavior
+extern crate panic_abort;
 
 use core::fmt::Write;
 

@@ -1,12 +1,12 @@
 //! Using a device crate
 //!
 //! Crates generated using [`svd2rust`] are referred to as device crates. These crates provides an
-//! API to access the peripherals of a device. When you depend on one of these crates and the "rt"
-//! feature is enabled you don't need link to the cortex-m-rt crate.
+//! API to access the peripherals of a device.
 //!
 //! [`svd2rust`]: https://crates.io/crates/svd2rust
 //!
-//! Device crates also provide an `interrupt!` macro to register interrupt handlers.
+//! Device crates also provide an `interrupt!` macro (behind the "rt" feature) to register interrupt
+//! handlers.
 //!
 //! This example depends on the [`stm32f103xx`] crate so you'll have to add it to your Cargo.toml.
 //!
@@ -16,80 +16,82 @@
 //! $ edit Cargo.toml && tail $_
 //! [dependencies.stm32f103xx]
 //! features = ["rt"]
-//! version = "0.9.0"
+//! version = "0.10.0"
 //! ```
+//!
+//! The `stm32f103xx` crate provides an `interrupts.x` file so you must remove the one in the root
+//! of this crate.
 //!
 //! ---
 
-#![deny(warnings)]
-#![feature(const_fn)]
+#![no_main]
 #![no_std]
 
 extern crate cortex_m;
-// extern crate cortex_m_rt; // included in the device crate
-extern crate cortex_m_semihosting;
-#[macro_use(exception, interrupt)]
+#[macro_use]
+extern crate cortex_m_rt as rt;
+extern crate cortex_m_semihosting as sh;
+#[macro_use]
 extern crate stm32f103xx;
-extern crate panic_abort; // panicking behavior
+extern crate panic_abort;
 
-use core::cell::RefCell;
 use core::fmt::Write;
 
-use cortex_m::interrupt::{self, Mutex};
+use cortex_m::asm;
 use cortex_m::peripheral::syst::SystClkSource;
-use cortex_m_semihosting::hio::{self, HStdout};
+use rt::ExceptionFrame;
+use sh::hio::{self, HStdout};
 use stm32f103xx::Interrupt;
 
-static HSTDOUT: Mutex<RefCell<Option<HStdout>>> = Mutex::new(RefCell::new(None));
+main!(main);
 
-static NVIC: Mutex<RefCell<Option<cortex_m::peripheral::NVIC>>> = Mutex::new(RefCell::new(None));
+fn main() -> ! {
+    let p = cortex_m::Peripherals::take().unwrap();
 
-fn main() {
-    let global_p = cortex_m::Peripherals::take().unwrap();
-    interrupt::free(|cs| {
-        let hstdout = HSTDOUT.borrow(cs);
-        if let Ok(fd) = hio::hstdout() {
-            *hstdout.borrow_mut() = Some(fd);
-        }
+    let mut syst = p.SYST;
+    let mut nvic = p.NVIC;
 
-        let mut nvic = global_p.NVIC;
-        nvic.enable(Interrupt::TIM2);
-        *NVIC.borrow(cs).borrow_mut() = Some(nvic);
+    nvic.enable(Interrupt::EXTI0);
 
-        let mut syst = global_p.SYST;
-        syst.set_clock_source(SystClkSource::Core);
-        syst.set_reload(8_000_000); // 1s
-        syst.enable_counter();
-        syst.enable_interrupt();
-    });
+    syst.set_clock_source(SystClkSource::Core);
+    syst.set_reload(8_000_000); // 1s
+    syst.enable_counter();
+
+    loop {
+        // busy wait until the timer wraps around
+        while !syst.has_wrapped() {}
+
+        // trigger the `EXTI0` interrupt
+        nvic.set_pending(Interrupt::EXTI0);
+    }
 }
 
-exception!(SYS_TICK, tick);
+interrupt!(EXTI0, exti0, state: Option<HStdout> = None);
 
-fn tick() {
-    interrupt::free(|cs| {
-        let hstdout = HSTDOUT.borrow(cs);
-        if let Some(hstdout) = hstdout.borrow_mut().as_mut() {
-            writeln!(*hstdout, "Tick").ok();
-        }
+fn exti0(state: &mut Option<HStdout>) {
+    if state.is_none() {
+        *state = Some(hio::hstdout().unwrap());
+    }
 
-        if let Some(nvic) = NVIC.borrow(cs).borrow_mut().as_mut() {
-            nvic.set_pending(Interrupt::TIM2);
-        }
-    });
+    if let Some(hstdout) = state.as_mut() {
+        hstdout.write_str(".").unwrap();
+    }
 }
 
-interrupt!(TIM2, tock, locals: {
-    tocks: u32 = 0;
-});
+exception!(DefaultHandler, deh);
 
-fn tock(l: &mut TIM2::Locals) {
-    l.tocks += 1;
-
-    interrupt::free(|cs| {
-        let hstdout = HSTDOUT.borrow(cs);
-        if let Some(hstdout) = hstdout.borrow_mut().as_mut() {
-            writeln!(*hstdout, "Tock ({})", l.tocks).ok();
-        }
-    });
+#[inline(always)]
+fn deh(_nr: u8) {
+    asm::bkpt();
 }
+
+exception!(HardFault, hf);
+
+#[inline(always)]
+fn hf(_ef: &ExceptionFrame) -> ! {
+    asm::bkpt();
+
+    loop {}
+}
+
+interrupts!(DefaultHandler);

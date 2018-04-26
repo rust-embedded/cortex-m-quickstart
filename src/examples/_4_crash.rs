@@ -67,45 +67,49 @@
 //! ```
 //!
 //! ---
-
-#![no_main]
-#![no_std]
-
-extern crate cortex_m;
-#[macro_use]
-extern crate cortex_m_rt as rt;
-extern crate panic_abort;
-
-use core::ptr;
-
-use cortex_m::asm;
-use rt::ExceptionFrame;
-
-main!(main);
-
-#[inline(always)]
-fn main() -> ! {
-    unsafe {
-        ptr::read_volatile(0x2FFF_FFFF as *const u32);
-    }
-
-    loop {}
-}
-
-exception!(DefaultHandler, dh);
-
-#[inline(always)]
-fn dh(_nr: u8) {
-    asm::bkpt();
-}
-
-exception!(HardFault, hf);
-
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
-}
-
-interrupts!(DefaultHandler);
+//!
+//! ```
+//! 
+//! #![no_main]
+//! #![no_std]
+//! 
+//! extern crate cortex_m;
+//! #[macro_use]
+//! extern crate cortex_m_rt as rt;
+//! extern crate panic_abort;
+//! 
+//! use core::ptr;
+//! 
+//! use cortex_m::asm;
+//! use rt::ExceptionFrame;
+//! 
+//! main!(main);
+//! 
+//! #[inline(always)]
+//! fn main() -> ! {
+//!     unsafe {
+//!         ptr::read_volatile(0x2FFF_FFFF as *const u32);
+//!     }
+//! 
+//!     loop {}
+//! }
+//! 
+//! exception!(DefaultHandler, dh);
+//! 
+//! #[inline(always)]
+//! fn dh(_nr: u8) {
+//!     asm::bkpt();
+//! }
+//! 
+//! exception!(HardFault, hf);
+//! 
+//! #[inline(always)]
+//! fn hf(_ef: &ExceptionFrame) -> ! {
+//!     asm::bkpt();
+//! 
+//!     loop {}
+//! }
+//! 
+//! interrupts!(DefaultHandler);
+//! ```
+// Auto-generated. Do not modify.

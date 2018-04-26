@@ -4,9 +4,9 @@
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
+//! - ARM toolchain: `sudo apt-get install gcc-arm-none-eabi` (on Ubuntu)
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
-//! - [Optional] ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
@@ -27,7 +27,7 @@
 //! 2) Clone this crate
 //!
 //! ``` text
-//! $ cargo clone cortex-m-quickstart && cd $_
+//! $ git clone https://github.com/japaric/cortex-m-quickstart --branch less-unstable
 //! ```
 //!
 //! 3) Change the crate name, author and version
@@ -113,26 +113,6 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
-//! **NOTE** By default Cargo will use the LLD linker shipped with the Rust toolchain. If you
-//! encounter any linking error try to switch to the GNU linker by modifying the `.cargo/config`
-//! file as shown below:
-//!
-//! ``` text
-//!  runner = 'arm-none-eabi-gdb'
-//!  rustflags = [
-//!    "-C", "link-arg=-Tlink.x",
-//! -  "-C", "linker=lld",
-//! -  "-Z", "linker-flavor=ld.lld",
-//! -  # "-C", "linker=arm-none-eabi-ld",
-//! -  # "-Z", "linker-flavor=ld",
-//! +  # "-C", "linker=lld",
-//! +  # "-Z", "linker-flavor=ld.lld",
-//! +  "-C", "linker=arm-none-eabi-ld",
-//! +  "-Z", "linker-flavor=ld",
-//!    "-Z", "thinlto=no",
-//!  ]
-//! ```
-//!
 //! 9) Flash the program
 //!
 //! ``` text
@@ -185,13 +165,7 @@
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //! |
-//! = note: "lld" "-L" (..)
-//! = note: arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
-//! arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
-//! arm-none-eabi-ld:
-//! Invalid '.rodata.exceptions' section.
-//! Make sure to place a static with type `cortex_m::exception::Handlers`
-//! in that section (cf. #[link_section]) ONLY ONCE.
+//! = note: "arm-none-eabi-gcc" "-L" (..)
 //! ```
 //!
 //! Solution: Specify your device memory layout in the `memory.x` linker script.
@@ -204,8 +178,7 @@
 //! ``` text
 //! $ cargo build
 //! (..)
-//! Compiling cortex-m-semihosting v0.2.0
-//! error[E0463]: can't find crate for `std`
+//! error: language item required, but not found: `eh_personality`
 //!
 //! error: aborting due to previous error
 //! ```
@@ -259,6 +232,19 @@
 //! `/usr/share/openocd/scripts` directory (exact location varies per
 //! distribution / OS) for a list of scripts that can be used.
 //!
+//! ## Forgot to install the `rust-std` component
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ cargo build
+//! error[E0463]: can't find crate for `core`
+//!   |
+//!   = note: the `thumbv7m-none-eabi` target may not be installed
+//! ```
+//!
+//! Solution: call `rustup target add thumbv7m-none-eabi` but with the name of your target
+//!
 //! ## Used an old nightly
 //!
 //! Error message:
@@ -281,12 +267,10 @@
 //!
 //! ``` text
 //! $ cargo build
-//! error: failed to run `rustc` to learn about target-specific information
-//!
-//! To learn more, run the command again with --verbose.
+//! error[E0463]: can't find crate for `core`
 //! ```
 //!
-//! Solution: Switch to the nightly toolchain with `rustup default nightly`.
+//! Solution: We are not there yet! Switch to the nightly toolchain with `rustup default nightly`.
 //!
 //! ## Used `gdb` instead of `arm-none-eabi-gdb`
 //!

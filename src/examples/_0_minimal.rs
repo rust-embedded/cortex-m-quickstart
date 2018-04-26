@@ -22,45 +22,49 @@
 //! - Define the device specific interrupt handlers. `interrupts!` can be used to create a generic
 //! program that works for all Cortex-M devices by binding all the possible interrupt handlers to
 //! the `DefaultHandler`.
-
-#![no_main] // <- IMPORTANT!
-#![no_std]
-
-extern crate cortex_m;
-#[macro_use(main, exception, interrupts)]
-extern crate cortex_m_rt as rt;
-extern crate panic_abort; // panicking behavior
-
-use cortex_m::asm;
-use rt::ExceptionFrame;
-
-// the program entry point
-main!(main);
-
-#[inline(always)]
-fn main() -> ! {
-    asm::bkpt();
-
-    loop {}
-}
-
-// define the default exception handler
-exception!(DefaultHandler, deh);
-
-#[inline(always)]
-fn deh(_nr: u8) {
-    asm::bkpt();
-}
-
-// define the hard fault handler
-exception!(HardFault, hf);
-
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
-}
-
-// bind all interrupts to the default exception handler
-interrupts!(DefaultHandler);
+//!
+//! ```
+//! 
+//! #![no_main] // <- IMPORTANT!
+//! #![no_std]
+//! 
+//! extern crate cortex_m;
+//! #[macro_use(main, exception, interrupts)]
+//! extern crate cortex_m_rt as rt;
+//! extern crate panic_abort; // panicking behavior
+//! 
+//! use cortex_m::asm;
+//! use rt::ExceptionFrame;
+//! 
+//! // the program entry point
+//! main!(main);
+//! 
+//! #[inline(always)]
+//! fn main() -> ! {
+//!     asm::bkpt();
+//! 
+//!     loop {}
+//! }
+//! 
+//! // define the default exception handler
+//! exception!(DefaultHandler, deh);
+//! 
+//! #[inline(always)]
+//! fn deh(_nr: u8) {
+//!     asm::bkpt();
+//! }
+//! 
+//! // define the hard fault handler
+//! exception!(HardFault, hf);
+//! 
+//! #[inline(always)]
+//! fn hf(_ef: &ExceptionFrame) -> ! {
+//!     asm::bkpt();
+//! 
+//!     loop {}
+//! }
+//! 
+//! // bind all interrupts to the default exception handler
+//! interrupts!(DefaultHandler);
+//! ```
+// Auto-generated. Do not modify.
