@@ -12,28 +12,44 @@
 //!
 //! ---
 
-#![feature(used)]
+#![no_main]
 #![no_std]
 
 #[macro_use]
 extern crate cortex_m;
-extern crate cortex_m_rt;
+#[macro_use]
+extern crate cortex_m_rt as rt;
 extern crate panic_abort; // panicking behavior
 
 use cortex_m::{asm, Peripherals};
+use rt::ExceptionFrame;
 
-fn main() {
-    let p = Peripherals::take().unwrap();
-    let mut itm = p.ITM;
+main!(main);
 
-    iprintln!(&mut itm.stim[0], "Hello, world!");
+#[inline(always)]
+fn main() -> ! {
+    let mut p = Peripherals::take().unwrap();
+    let stim = &mut p.ITM.stim[0];
+
+    iprintln!(stim, "Hello, world!");
+
+    loop {}
 }
 
-// As we are not using interrupts, we just register a dummy catch all handler
-#[link_section = ".vector_table.interrupts"]
-#[used]
-static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+exception!(DefaultHandler, dh);
 
-extern "C" fn default_handler() {
+#[inline(always)]
+fn dh(_nr: u8) {
     asm::bkpt();
 }
+
+exception!(HardFault, hf);
+
+#[inline(always)]
+fn hf(_ef: &ExceptionFrame) -> ! {
+    asm::bkpt();
+
+    loop {}
+}
+
+interrupts!(DefaultHandler);

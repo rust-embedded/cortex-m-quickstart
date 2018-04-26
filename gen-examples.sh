@@ -5,11 +5,12 @@ set -ex
 
 main() {
     local examples=(
+        minimal
         hello
         itm
         panic
         crash
-        override-exception-handler
+        exception
         device
         allocator
     )

@@ -1,39 +1,27 @@
 [target.thumbv6m-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Tlink.x",
-  "-C", "linker=lld",
-  "-Z", "linker-flavor=ld.lld",
-  # "-C", "linker=arm-none-eabi-ld",
-  # "-Z", "linker-flavor=ld",
+  "-C", "link-arg=-Wl,-Tlink.x",
+  "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7m-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Tlink.x",
-  "-C", "linker=lld",
-  "-Z", "linker-flavor=ld.lld",
-  # "-C", "linker=arm-none-eabi-ld",
-  # "-Z", "linker-flavor=ld",
+  "-C", "link-arg=-Wl,-Tlink.x",
+  "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7em-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Tlink.x",
-  "-C", "linker=lld",
-  "-Z", "linker-flavor=ld.lld",
-  # "-C", "linker=arm-none-eabi-ld",
-  # "-Z", "linker-flavor=ld",
+  "-C", "link-arg=-Wl,-Tlink.x",
+  "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7em-none-eabihf]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Tlink.x",
-  "-C", "linker=lld",
-  "-Z", "linker-flavor=ld.lld",
-  # "-C", "linker=arm-none-eabi-ld",
-  # "-Z", "linker-flavor=ld",
+  "-C", "link-arg=-Wl,-Tlink.x",
+  "-C", "link-arg=-nostartfiles",
 ]

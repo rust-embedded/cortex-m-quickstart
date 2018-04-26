@@ -17,8 +17,9 @@ EOF
 
     local examples=(
         crash
+        exception
         hello
-        override-exception-handler
+        minimal
         panic
     )
     for ex in "${examples[@]}"; do

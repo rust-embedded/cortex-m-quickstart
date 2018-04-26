@@ -7,25 +7,39 @@
 //!
 //! ---
 
-#![feature(used)]
+#![no_main]
 #![no_std]
 
 extern crate cortex_m;
-extern crate cortex_m_rt;
+#[macro_use]
+extern crate cortex_m_rt as rt;
 // extern crate panic_abort;
 extern crate panic_semihosting; // reports panic messages to the host stderr using semihosting
 
 use cortex_m::asm;
+use rt::ExceptionFrame;
 
-fn main() {
-    panic!("Oops");
+main!(main);
+
+#[inline(always)]
+fn main() -> ! {
+    panic!("Oops")
 }
 
-// As we are not using interrupts, we just register a dummy catch all handler
-#[link_section = ".vector_table.interrupts"]
-#[used]
-static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+exception!(DefaultHandler, deh);
 
-extern "C" fn default_handler() {
+#[inline(always)]
+fn deh(_nr: u8) {
     asm::bkpt();
 }
+
+exception!(HardFault, hf);
+
+#[inline(always)]
+fn hf(_ef: &ExceptionFrame) -> ! {
+    asm::bkpt();
+
+    loop {}
+}
+
+interrupts!(DefaultHandler);

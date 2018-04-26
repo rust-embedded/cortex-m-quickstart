@@ -8,78 +8,104 @@
 //! debugger using these commands:
 //!
 //! ``` text
+//! (gdb) continue
+//! Program received signal SIGTRAP, Trace/breakpoint trap.
+//! __bkpt () at asm/bkpt.s:3
+//! 3         bkpt
+//!
+//! (gdb) finish
+//! Run till exit from #0  __bkpt () at asm/bkpt.s:3
+//! Note: automatically using hardware breakpoints for read-only addresses.
+//! crash::hf (_ef=0x20004fa0) at examples/crash.rs:102
+//! 99         asm::bkpt();
+//!
 //! (gdb) # Exception frame = program state during the crash
-//! (gdb) print/x *ef
-//! $1 = cortex_m::exception::ExceptionFrame {
-//!   r0 = 0x2fffffff,
-//!   r1 = 0x2fffffff,
-//!   r2 = 0x0,
-//!   r3 = 0x0,
-//!   r12 = 0x0,
-//!   lr = 0x8000481,
-//!   pc = 0x8000460,
-//!   xpsr = 0x61000000,
+//! (gdb) print/x *_ef
+//! $1 = cortex_m_rt::ExceptionFrame {
+//!   r0: 0x2fffffff,
+//!   r1: 0x2fffffff,
+//!   r2: 0x80006b0,
+//!   r3: 0x80006b0,
+//!   r12: 0x20000000,
+//!   lr: 0x800040f,
+//!   pc: 0x800066a,
+//!   xpsr: 0x61000000
 //! }
 //!
 //! (gdb) # Where did we come from?
 //! (gdb) backtrace
-//! #0  cortex_m_rt::default_handler (ef=0x20004f54) at (..)
-//! #1  <signal handler called>
-//! #2  0x08000460 in core::ptr::read_volatile<u32> (src=0x2fffffff) at (..)
-//! #3  0x08000480 in crash::main () at examples/crash.rs:68
+//! #0  crash::hf (_ef=0x20004fa0) at examples/crash.rs:102
+//! #1  0x080004ac in UserHardFault (ef=0x20004fa0) at <exception macros>:9
+//! #2  <signal handler called>
+//! #3  0x0800066a in core::ptr::read_volatile (src=0x2fffffff) at /checkout/src/libcore/ptr.rs:452
+//! #4  0x0800040e in crash::main () at examples/crash.rs:85
+//! #5  0x08000456 in main () at <main macros>:3
 //!
 //! (gdb) # Nail down the location of the crash
-//! (gdb) disassemble/m ef.pc
-//! Dump of assembler code for function core::ptr::read_volatile<u32>:
-//! 408     pub unsafe fn read_volatile<T>(src: *const T) -> T {
-//!    0x08000454 <+0>:     sub     sp, #20
-//!    0x08000456 <+2>:     mov     r1, r0
-//!    0x08000458 <+4>:     str     r0, [sp, #8]
-//!    0x0800045a <+6>:     ldr     r0, [sp, #8]
-//!    0x0800045c <+8>:     str     r0, [sp, #12]
+//! (gdb) disassemble/m _ef.pc
+//! Dump of assembler code for function core::ptr::read_volatile:
+//! 451     pub unsafe fn read_volatile<T>(src: *const T) -> T {}
+//!    0x08000662 <+0>:     sub     sp, #16
+//!    0x08000664 <+2>:     mov     r1, r0
+//!    0x08000666 <+4>:     str     r0, [sp, #8]
 //!
-//! 409         intrinsics::volatile_load(src)
-//!    0x0800045e <+10>:    ldr     r0, [sp, #12]
-//!    0x08000460 <+12>:    ldr     r0, [r0, #0]
-//!    0x08000462 <+14>:    str     r0, [sp, #16]
-//!    0x08000464 <+16>:    ldr     r0, [sp, #16]
-//!    0x08000466 <+18>:    str     r1, [sp, #4]
-//!    0x08000468 <+20>:    str     r0, [sp, #0]
-//!    0x0800046a <+22>:    b.n     0x800046c <core::ptr::read_volatile<u32>+24>
+//! 452         intrinsics::volatile_load(src)
+//!    0x08000668 <+6>:     ldr     r0, [sp, #8]
+//!    0x0800066a <+8>:     ldr     r0, [r0, #0]
+//!    0x0800066c <+10>:    str     r0, [sp, #12]
+//!    0x0800066e <+12>:    ldr     r0, [sp, #12]
+//!    0x08000670 <+14>:    str     r1, [sp, #4]
+//!    0x08000672 <+16>:    str     r0, [sp, #0]
+//!    0x08000674 <+18>:    b.n     0x8000676 <core::ptr::read_volatile+20>
 //!
-//! 410     }
-//!    0x0800046c <+24>:    ldr     r0, [sp, #0]
-//!    0x0800046e <+26>:    add     sp, #20
-//!    0x08000470 <+28>:    bx      lr
+//! 453     }
+//!    0x08000676 <+20>:    ldr     r0, [sp, #0]
+//!    0x08000678 <+22>:    add     sp, #16
+//!    0x0800067a <+24>:    bx      lr
 //!
 //! End of assembler dump.
 //! ```
 //!
 //! ---
 
-#![feature(used)]
+#![no_main]
 #![no_std]
 
 extern crate cortex_m;
-extern crate cortex_m_rt;
+#[macro_use]
+extern crate cortex_m_rt as rt;
 extern crate panic_abort; // panicking behavior
 
 use core::ptr;
 
 use cortex_m::asm;
+use rt::ExceptionFrame;
 
-fn main() {
-    // Read an invalid memory address
+main!(main);
+
+#[inline(always)]
+fn main() -> ! {
     unsafe {
         ptr::read_volatile(0x2FFF_FFFF as *const u32);
     }
+
+    loop {}
 }
 
-// As we are not using interrupts, we just register a dummy catch all handler
-#[link_section = ".vector_table.interrupts"]
-#[used]
-static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+exception!(DefaultHandler, dh);
 
-extern "C" fn default_handler() {
+#[inline(always)]
+fn dh(_nr: u8) {
     asm::bkpt();
 }
+
+exception!(HardFault, hf);
+
+#[inline(always)]
+fn hf(_ef: &ExceptionFrame) -> ! {
+    asm::bkpt();
+
+    loop {}
+}
+
+interrupts!(DefaultHandler);

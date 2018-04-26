@@ -1,34 +1,40 @@
 #![no_main] // <- IMPORTANT!
 #![no_std]
 
+extern crate cortex_m;
 #[macro_use]
-extern crate cortex_m_rt;
+extern crate cortex_m_rt as rt;
 extern crate panic_abort;
 
-use core::ptr;
+use cortex_m::asm;
+use rt::ExceptionFrame;
 
 // user entry point
 main!(main);
 
+#[inline(always)]
 fn main() -> ! {
-    loop {
-        unsafe {
-            // NOTE side affect to avoid UB
-            ptr::read_volatile(0x2000_0000 as *const u32);
-        }
-    }
+    asm::bkpt();
+
+    loop {}
 }
 
 // define the default exception handler
 exception!(DefaultHandler, deh);
 
-fn deh(_nr: u8) -> ! {
-    loop {
-        unsafe {
-            // NOTE side affect to avoid UB
-            ptr::read_volatile(0x2000_0004 as *const u32);
-        }
-    }
+#[inline(always)]
+fn deh(_nr: u8) {
+    asm::bkpt();
+}
+
+// define the hard fault handler
+exception!(HardFault, hf);
+
+#[inline(always)]
+fn hf(_ef: &ExceptionFrame) -> ! {
+    asm::bkpt();
+
+    loop {}
 }
 
 // bind all interrupts to the default exception handler
