@@ -35,4 +35,4 @@ version = "0.2.1"
 [profile.release]
 debug = true
 lto = true
-opt-level = "s"
+opt-level = "s" # TODO remove; this flag requires nightly
