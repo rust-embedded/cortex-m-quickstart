@@ -17,10 +17,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Updated the `allocator` example to compile on a recent nightly.
 
-- Removed `opt-level = "s"` from `profile.release`. This flag is still unstable.
-
 - Set the number of codegen-units to 1 when compiling in release mode. This produces smaller and
   faster binaries.
+
+### Removed
+
+- Removed `opt-level = "s"` from `profile.release`. This flag is still unstable.
 
 ## [v0.2.7] - 2018-04-24
 
