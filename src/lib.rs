@@ -4,9 +4,9 @@
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
+//! - ARM toolchain: `sudo apt-get install gcc-arm-none-eabi` (on Ubuntu)
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
-//! - [Optional] ARM linker: `sudo apt-get install binutils-arm-none-eabi` (on Ubuntu)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
@@ -27,7 +27,7 @@
 //! 2) Clone this crate
 //!
 //! ``` text
-//! $ cargo clone cortex-m-quickstart && cd $_
+//! $ git clone cortex-m-quickstart --vers 0.3.0
 //! ```
 //!
 //! 3) Change the crate name, author and version
@@ -43,8 +43,8 @@
 //! 4) Specify the memory layout of the target device
 //!
 //! **NOTE** board support crates sometimes provide this file for you (check the crate
-//! documentation). If you are using one that does then remove *both* the `memory.x` and `build.rs`
-//! files.
+//! documentation). If you are using one that does then remove *both* `memory.x` and `build.rs` from
+//! the root of this crate.
 //!
 //! ``` text
 //! $ cat >memory.x <<'EOF'
@@ -57,7 +57,8 @@
 //! EOF
 //! ```
 //!
-//! 5) Optionally, set a default build target
+//! 5) Optionally, set a default build target. This way you don't have to pass `--target` to each
+//! Cargo invocation.
 //!
 //! ``` text
 //! $ cat >>.cargo/config <<'EOF'
@@ -113,27 +114,7 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
-//! **NOTE** By default Cargo will use the LLD linker shipped with the Rust toolchain. If you
-//! encounter any linking error try to switch to the GNU linker by modifying the `.cargo/config`
-//! file as shown below:
-//!
-//! ``` text
-//!  runner = 'arm-none-eabi-gdb'
-//!  rustflags = [
-//!    "-C", "link-arg=-Tlink.x",
-//! -  "-C", "linker=lld",
-//! -  "-Z", "linker-flavor=ld.lld",
-//! -  # "-C", "linker=arm-none-eabi-ld",
-//! -  # "-Z", "linker-flavor=ld",
-//! +  # "-C", "linker=lld",
-//! +  # "-Z", "linker-flavor=ld.lld",
-//! +  "-C", "linker=arm-none-eabi-ld",
-//! +  "-Z", "linker-flavor=ld",
-//!    "-Z", "thinlto=no",
-//!  ]
-//! ```
-//!
-//! 9) Flash the program
+//! 9) Flash and debug the program
 //!
 //! ``` text
 //! $ # Launch OpenOCD on a terminal
@@ -185,34 +166,28 @@
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //! |
-//! = note: "lld" "-L" (..)
-//! = note: arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
-//! arm-none-eabi-ld: address 0xbaaab838 of hello section `.text' is ..
-//! arm-none-eabi-ld:
-//! Invalid '.rodata.exceptions' section.
-//! Make sure to place a static with type `cortex_m::exception::Handlers`
-//! in that section (cf. #[link_section]) ONLY ONCE.
+//! = note: "arm-none-eabi-gcc" "-L" (..)
+//! (..)
+//!           (..)/ld: region `FLASH' overflowed by XXX bytes
 //! ```
 //!
-//! Solution: Specify your device memory layout in the `memory.x` linker script.
-//! See [Usage] section.
+//! Solution: Specify your device memory layout in the `memory.x` linker script. See [Usage]
+//! section.
 //!
-//! ## Forgot to set a default build target
+//! ## Didn't set a default build target and forgot to pass `--target` to Cargo
 //!
 //! Error message:
 //!
 //! ``` text
 //! $ cargo build
 //! (..)
-//! Compiling cortex-m-semihosting v0.2.0
-//! error[E0463]: can't find crate for `std`
+//! error: language item required, but not found: `eh_personality`
 //!
 //! error: aborting due to previous error
 //! ```
 //!
-//! Solution: Set a default build target in the `.cargo/config` file
-//! (see [Usage] section), or call Cargo with `--target` flag:
-//! `cargo build --target thumbv7em-none-eabi`.
+//! Solution: Set a default build target in the `.cargo/config` file (see [Usage] section), or call
+//! Cargo with `--target` flag: `cargo build --target thumbv7em-none-eabi`.
 //!
 //! ## Overwrote the original `.cargo/config` file
 //!
@@ -236,11 +211,10 @@
 //! collect2: error: ld returned 1 exit status
 //! ```
 //!
-//! Solution: You probably overwrote the original `.cargo/config` instead of
-//! appending the default build target (e.g. `cat >` instead of `cat >>`). The
-//! less error prone way to fix this is to remove the `.cargo` directory, clone
-//! a new copy of the template and then copy the `.cargo` directory from that
-//! fresh template into your current project. Don't forget to *append* the
+//! Solution: You probably overwrote the original `.cargo/config` instead of appending the default
+//! build target (e.g. `cat >` instead of `cat >>`). The less error prone way to fix this is to
+//! remove the `.cargo` directory, clone a new copy of the template and then copy the `.cargo`
+//! directory from that fresh template into your current project. Don't forget to *append* the
 //! default build target to `.cargo/config`.
 //!
 //! ## Called OpenOCD with wrong arguments
@@ -255,9 +229,21 @@
 //! in procedure 'ocd_bouncer'
 //! ```
 //!
-//! Solution: Correct the OpenOCD arguments. Check the
-//! `/usr/share/openocd/scripts` directory (exact location varies per
-//! distribution / OS) for a list of scripts that can be used.
+//! Solution: Correct the OpenOCD arguments. Check the `/usr/share/openocd/scripts` directory (exact
+//! location varies per distribution / OS) for a list of scripts that can be used.
+//!
+//! ## Forgot to install the `rust-std` component
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ cargo build
+//! error[E0463]: can't find crate for `core`
+//!   |
+//!   = note: the `thumbv7m-none-eabi` target may not be installed
+//! ```
+//!
+//! Solution: call `rustup target add thumbv7m-none-eabi` but with the name of your target
 //!
 //! ## Used an old nightly
 //!
@@ -281,12 +267,12 @@
 //!
 //! ``` text
 //! $ cargo build
-//! error: failed to run `rustc` to learn about target-specific information
-//!
-//! To learn more, run the command again with --verbose.
+//! error[E0463]: can't find crate for `core`
+//!   |
+//!   = note: the `thumbv7em-none-eabihf` target may not be installed
 //! ```
 //!
-//! Solution: Switch to the nightly toolchain with `rustup default nightly`.
+//! Solution: We are not there yet! Switch to the nightly toolchain with `rustup default nightly`.
 //!
 //! ## Used `gdb` instead of `arm-none-eabi-gdb`
 //!

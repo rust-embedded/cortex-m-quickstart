@@ -75,40 +75,44 @@
 //! we see that the `r0` contained the address `0x2FFF_FFFF` when this instruction was executed.
 //!
 //! ---
-
-#![no_main]
-#![no_std]
-
-extern crate cortex_m;
-#[macro_use]
-extern crate cortex_m_rt as rt;
-extern crate panic_semihosting;
-
-use core::ptr;
-
-use rt::ExceptionFrame;
-
-entry!(main);
-
-fn main() -> ! {
-    unsafe {
-        // read an address outside of the RAM region; causes a HardFault exception
-        ptr::read_volatile(0x2FFF_FFFF as *const u32);
-    }
-
-    loop {}
-}
-
-// define the hard fault handler
-exception!(HardFault, hard_fault);
-
-fn hard_fault(ef: &ExceptionFrame) -> ! {
-    panic!("HardFault at {:#?}", ef);
-}
-
-// define the default exception handler
-exception!(*, default_handler);
-
-fn default_handler(irqn: i16) {
-    panic!("Unhandled exception (IRQn = {})", irqn);
-}
+//!
+//! ```
+//!
+//! #![no_main]
+//! #![no_std]
+//!
+//! extern crate cortex_m;
+//! #[macro_use]
+//! extern crate cortex_m_rt as rt;
+//! extern crate panic_semihosting;
+//!
+//! use core::ptr;
+//!
+//! use rt::ExceptionFrame;
+//!
+//! entry!(main);
+//!
+//! fn main() -> ! {
+//!     unsafe {
+//!         // read an address outside of the RAM region; causes a HardFault exception
+//!         ptr::read_volatile(0x2FFF_FFFF as *const u32);
+//!     }
+//!
+//!     loop {}
+//! }
+//!
+//! // define the hard fault handler
+//! exception!(HardFault, hard_fault);
+//!
+//! fn hard_fault(ef: &ExceptionFrame) -> ! {
+//!     panic!("HardFault at {:#?}", ef);
+//! }
+//!
+//! // define the default exception handler
+//! exception!(*, default_handler);
+//!
+//! fn default_handler(irqn: i16) {
+//!     panic!("Unhandled exception (IRQn = {})", irqn);
+//! }
+//! ```
+// Auto-generated. Do not modify.

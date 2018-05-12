@@ -1,39 +1,54 @@
 //! Sends "Hello, world!" through the ITM port 0
 //!
-//! **IMPORTANT** Not all Cortex-M chips support ITM. You'll have to connect the microcontroller's
-//! SWO pin to the SWD interface. Note that some development boards don't provide this option.
-//!
 //! ITM is much faster than semihosting. Like 4 orders of magnitude or so.
 //!
-//! You'll need [`itmdump`] to receive the message on the host plus you'll need to uncomment the
+//! **NOTE** Cortex-M0 chips don't support ITM.
+//!
+//! You'll have to connect the microcontroller's SWO pin to the SWD interface. Note that some
+//! development boards don't provide this option.
+//!
+//! You'll need [`itmdump`] to receive the message on the host plus you'll need to uncomment two
 //! `monitor` commands in the `.gdbinit` file.
 //!
 //! [`itmdump`]: https://docs.rs/itm/0.2.1/itm/
 //!
 //! ---
 
-#![feature(used)]
+#![no_main]
 #![no_std]
 
 #[macro_use]
 extern crate cortex_m;
-extern crate cortex_m_rt;
-extern crate panic_abort; // panicking behavior
+#[macro_use]
+extern crate cortex_m_rt as rt;
+extern crate panic_semihosting;
 
 use cortex_m::{asm, Peripherals};
+use rt::ExceptionFrame;
 
-fn main() {
-    let p = Peripherals::take().unwrap();
-    let mut itm = p.ITM;
+entry!(main);
 
-    iprintln!(&mut itm.stim[0], "Hello, world!");
+fn main() -> ! {
+    let mut p = Peripherals::take().unwrap();
+    let stim = &mut p.ITM.stim[0];
+
+    iprintln!(stim, "Hello, world!");
+
+    loop {
+        asm::bkpt();
+    }
 }
 
-// As we are not using interrupts, we just register a dummy catch all handler
-#[link_section = ".vector_table.interrupts"]
-#[used]
-static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
+// define the hard fault handler
+exception!(HardFault, hard_fault);
 
-extern "C" fn default_handler() {
-    asm::bkpt();
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
+}
+
+// define the default exception handler
+exception!(*, default_handler);
+
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }

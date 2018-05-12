@@ -10,55 +10,70 @@
 //! ---
 //!
 //! ```
-//! 
+//!
 //! #![feature(alloc)]
 //! #![feature(global_allocator)]
-//! #![feature(used)]
+//! #![feature(lang_items)]
+//! #![no_main]
 //! #![no_std]
-//! 
+//!
 //! // This is the allocator crate; you can use a different one
 //! extern crate alloc_cortex_m;
 //! #[macro_use]
 //! extern crate alloc;
 //! extern crate cortex_m;
-//! extern crate cortex_m_rt;
-//! extern crate cortex_m_semihosting;
-//! extern crate panic_abort; // panicking behavior
-//! 
+//! #[macro_use]
+//! extern crate cortex_m_rt as rt;
+//! extern crate cortex_m_semihosting as sh;
+//! extern crate panic_semihosting;
+//!
 //! use core::fmt::Write;
-//! 
+//!
 //! use alloc_cortex_m::CortexMHeap;
 //! use cortex_m::asm;
-//! use cortex_m_semihosting::hio;
-//! 
+//! use rt::ExceptionFrame;
+//! use sh::hio;
+//!
+//! // this is the allocator the application will use
 //! #[global_allocator]
 //! static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
-//! 
-//! extern "C" {
-//!     static mut _sheap: u32;
-//! }
-//! 
+//!
 //! const HEAP_SIZE: usize = 1024; // in bytes
-//! 
-//! fn main() {
-//!     // Initialize the allocator
-//!     let start = unsafe { &mut _sheap as *mut u32 as usize };
-//!     unsafe { ALLOCATOR.init(start, HEAP_SIZE) }
-//! 
+//!
+//! entry!(main);
+//!
+//! fn main() -> ! {
+//!     // Initialize the allocator BEFORE you use it
+//!     unsafe { ALLOCATOR.init(rt::heap_start() as usize, HEAP_SIZE) }
+//!
 //!     // Growable array allocated on the heap
 //!     let xs = vec![0, 1, 2];
-//! 
+//!
 //!     let mut stdout = hio::hstdout().unwrap();
 //!     writeln!(stdout, "{:?}", xs).unwrap();
+//!
+//!     loop {}
 //! }
-//! 
-//! // As we are not using interrupts, we just register a dummy catch all handler
-//! #[link_section = ".vector_table.interrupts"]
-//! #[used]
-//! static INTERRUPTS: [extern "C" fn(); 240] = [default_handler; 240];
-//! 
-//! extern "C" fn default_handler() {
+//!
+//! // define what happens in an Out Of Memory (OOM) condition
+//! #[lang = "oom"]
+//! #[no_mangle]
+//! pub fn rust_oom() -> ! {
 //!     asm::bkpt();
+//!
+//!     loop {}
+//! }
+//!
+//! exception!(HardFault, hard_fault);
+//!
+//! fn hard_fault(ef: &ExceptionFrame) -> ! {
+//!     panic!("HardFault at {:#?}", ef);
+//! }
+//!
+//! exception!(*, default_handler);
+//!
+//! fn default_handler(irqn: i16) {
+//!     panic!("Unhandled exception (IRQn = {})", irqn);
 //! }
 //! ```
 // Auto-generated. Do not modify.
