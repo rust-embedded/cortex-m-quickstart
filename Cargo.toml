@@ -12,11 +12,13 @@ version = "0.3.0"
 cortex-m = "0.5.0"
 cortex-m-rt = "0.5.0"
 cortex-m-semihosting = "0.3.0"
-panic-itm = "0.1.1"
 panic-semihosting = "0.2.0"
 
+# Uncomment for the panic example.
+# panic-itm = "0.1.1"
+
 # Uncomment for the allocator example.
-# alloc-cortex-m = "0.3.6"
+# alloc-cortex-m = "0.3.4"
 
 # Uncomment for the device example.
 # [dependencies.stm32f103xx]

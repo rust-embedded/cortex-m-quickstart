@@ -9,7 +9,6 @@ main() {
     cat >memory.x <<'EOF'
 MEMORY
 {
-  /* NOTE K = KiBi = 1024 bytes */
   FLASH : ORIGIN = 0x08000000, LENGTH = 256K
   RAM : ORIGIN = 0x20000000, LENGTH = 40K
 }
@@ -34,17 +33,15 @@ EOF
         cargo build --target $TARGET --example $ex --release
 
         examples+=( $ex )
-
     fi
 
     # Allocator example needs an extra dependency
     cat >>Cargo.toml <<'EOF'
 [dependencies.alloc-cortex-m]
-version = "0.3.3"
+version = "0.3.4"
 EOF
 
     local ex=allocator
-    cargo build --target $TARGET --example $ex
     cargo build --target $TARGET --example $ex --release
 
     examples+=( $ex )
@@ -54,7 +51,7 @@ EOF
         cat >>Cargo.toml <<'EOF'
 [dependencies.stm32f103xx]
 features = ["rt"]
-version = "0.9.0"
+version = "0.10.0"
 EOF
 
         local ex=device

@@ -18,6 +18,7 @@ extern crate cortex_m_rt as rt;
 extern crate panic_semihosting;
 
 // Logs panic messages using the ITM (Instrumentation Trace Macrocell)
+// NOTE to use this you need to uncomment the `panic-itm` dependency in Cargo.toml
 // extern crate panic_itm;
 
 use rt::ExceptionFrame;
