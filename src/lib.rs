@@ -27,7 +27,7 @@
 //! 2) Clone this crate
 //!
 //! ``` text
-//! $ git clone https://github.com/japaric/cortex-m-quickstart --branch less-unstable
+//! $ git clone cortex-m-quickstart --vers 0.3.0
 //! ```
 //!
 //! 3) Change the crate name, author and version
@@ -43,8 +43,8 @@
 //! 4) Specify the memory layout of the target device
 //!
 //! **NOTE** board support crates sometimes provide this file for you (check the crate
-//! documentation). If you are using one that does then remove *both* the `memory.x` and `build.rs`
-//! files.
+//! documentation). If you are using one that does then remove *both* `memory.x` and `build.rs` from
+//! the root of this crate.
 //!
 //! ``` text
 //! $ cat >memory.x <<'EOF'
@@ -57,7 +57,8 @@
 //! EOF
 //! ```
 //!
-//! 5) Optionally, set a default build target
+//! 5) Optionally, set a default build target. This way you don't have to pass `--target` to each
+//! Cargo invocation.
 //!
 //! ``` text
 //! $ cat >>.cargo/config <<'EOF'
@@ -113,7 +114,7 @@
 //!   Tag_ABI_FP_16bit_format: IEEE 754
 //! ```
 //!
-//! 9) Flash the program
+//! 9) Flash and debug the program
 //!
 //! ``` text
 //! $ # Launch OpenOCD on a terminal
@@ -166,12 +167,14 @@
 //! error: linking with `arm-none-eabi-ld` failed: exit code: 1
 //! |
 //! = note: "arm-none-eabi-gcc" "-L" (..)
+//! (..)
+//!           (..)/ld: region `FLASH' overflowed by XXX bytes
 //! ```
 //!
-//! Solution: Specify your device memory layout in the `memory.x` linker script.
-//! See [Usage] section.
+//! Solution: Specify your device memory layout in the `memory.x` linker script. See [Usage]
+//! section.
 //!
-//! ## Forgot to set a default build target
+//! ## Didn't set a default build target and forgot to pass `--target` to Cargo
 //!
 //! Error message:
 //!
@@ -183,9 +186,8 @@
 //! error: aborting due to previous error
 //! ```
 //!
-//! Solution: Set a default build target in the `.cargo/config` file
-//! (see [Usage] section), or call Cargo with `--target` flag:
-//! `cargo build --target thumbv7em-none-eabi`.
+//! Solution: Set a default build target in the `.cargo/config` file (see [Usage] section), or call
+//! Cargo with `--target` flag: `cargo build --target thumbv7em-none-eabi`.
 //!
 //! ## Overwrote the original `.cargo/config` file
 //!
@@ -209,11 +211,10 @@
 //! collect2: error: ld returned 1 exit status
 //! ```
 //!
-//! Solution: You probably overwrote the original `.cargo/config` instead of
-//! appending the default build target (e.g. `cat >` instead of `cat >>`). The
-//! less error prone way to fix this is to remove the `.cargo` directory, clone
-//! a new copy of the template and then copy the `.cargo` directory from that
-//! fresh template into your current project. Don't forget to *append* the
+//! Solution: You probably overwrote the original `.cargo/config` instead of appending the default
+//! build target (e.g. `cat >` instead of `cat >>`). The less error prone way to fix this is to
+//! remove the `.cargo` directory, clone a new copy of the template and then copy the `.cargo`
+//! directory from that fresh template into your current project. Don't forget to *append* the
 //! default build target to `.cargo/config`.
 //!
 //! ## Called OpenOCD with wrong arguments
@@ -228,9 +229,8 @@
 //! in procedure 'ocd_bouncer'
 //! ```
 //!
-//! Solution: Correct the OpenOCD arguments. Check the
-//! `/usr/share/openocd/scripts` directory (exact location varies per
-//! distribution / OS) for a list of scripts that can be used.
+//! Solution: Correct the OpenOCD arguments. Check the `/usr/share/openocd/scripts` directory (exact
+//! location varies per distribution / OS) for a list of scripts that can be used.
 //!
 //! ## Forgot to install the `rust-std` component
 //!
@@ -268,6 +268,8 @@
 //! ``` text
 //! $ cargo build
 //! error[E0463]: can't find crate for `core`
+//!   |
+//!   = note: the `thumbv7em-none-eabihf` target may not be installed
 //! ```
 //!
 //! Solution: We are not there yet! Switch to the nightly toolchain with `rustup default nightly`.

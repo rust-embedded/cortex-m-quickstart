@@ -5,6 +5,23 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.0] - 2018-05-12
+
+### Changed
+
+- [breaking-change] `arm-none-eabi-gcc` is now a mandatory dependency as it's required by the
+  `cortex-m-rt` dependency and also the default linker.
+
+- Bumped the `cortex-m` and `cortex-m-rt` dependencies to v0.5.0. Updated all the examples to match
+  the new `cortex-m-rt` API.
+
+- Updated the `allocator` example to compile on a recent nightly.
+
+- Removed `opt-level = "s"` from `profile.release`. This flag is still unstable.
+
+- Set the number of codegen-units to 1 when compiling in release mode. This produces smaller and
+  faster binaries.
+
 ## [v0.2.7] - 2018-04-24
 
 ### Changed
@@ -149,7 +166,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.7...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.0...HEAD
+[v0.3.0]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.7...v0.3.0
 [v0.2.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.6...v0.2.7
 [v0.2.6]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.5...v0.2.6
 [v0.2.5]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.4...v0.2.5

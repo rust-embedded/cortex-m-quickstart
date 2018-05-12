@@ -5,19 +5,17 @@
 #![no_main]
 #![no_std]
 
-extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt as rt;
 extern crate cortex_m_semihosting as sh;
-extern crate panic_abort;
+extern crate panic_semihosting;
 
 use core::fmt::Write;
 
-use cortex_m::asm;
 use rt::ExceptionFrame;
 use sh::hio;
 
-main!(main);
+entry!(main);
 
 fn main() -> ! {
     let mut stdout = hio::hstdout().unwrap();
@@ -26,21 +24,14 @@ fn main() -> ! {
     loop {}
 }
 
-exception!(DefaultHandler, dh);
+exception!(HardFault, hard_fault);
 
-#[inline(always)]
-fn dh(_nr: u8) {
-    asm::bkpt();
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
 }
 
-exception!(HardFault, hf);
+exception!(*, default_handler);
 
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }
-
-// As we are not using interrupts, we just bind them all to the `DefaultHandler` exception handler
-interrupts!(DefaultHandler);

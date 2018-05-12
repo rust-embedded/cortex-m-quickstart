@@ -1,66 +1,63 @@
 //! Minimal Cortex-M program
 //!
+//! When executed this program will hit the breakpoint set in `main`.
+//!
 //! All Cortex-M programs need to:
 //!
 //! - Contain the `#![no_main]` and `#![no_std]` attributes. Embedded programs don't use the
 //! standard Rust `main` interface or the Rust standard (`std`) library.
 //!
-//! - Define their entry point using `main!`. The entry point doesn't need to be called `main` and
-//! it doesn't need to be in the root of the crate.
+//! - Define their entry point using [`entry!`] macro.
+//!
+//! [`entry!`]: https://docs.rs/cortex-m-rt/~0.5/cortex_m_rt/macro.entry.html
 //!
 //! - Define their panicking behavior, i.e. what happens when `panic!` is called. The easiest way to
-//! define a panicking behavior is to link to a [panic implementation crate][0]
+//! define a panicking behavior is to link to a [panic handler crate][0]
 //!
 //! [0]: https://crates.io/keywords/panic-impl
 //!
-//! - Define the `HardFault` handler. This function is called when a hard fault exception is raised
-//! by the hardware.
+//! - Define the `HardFault` handler using the [`exception!`] macro. This handler (function) is
+//! called when a hard fault exception is raised by the hardware.
 //!
-//! - Define a default handler. This function will be used to handle all interrupts and exceptions
-//! which have not been assigned a specific handler.
+//! [`exception!`]: https://docs.rs/cortex-m-rt/~0.5/cortex_m_rt/macro..html
 //!
-//! - Define the device specific interrupt handlers. `interrupts!` can be used to create a generic
-//! program that works for all Cortex-M devices by binding all the possible interrupt handlers to
-//! the `DefaultHandler`.
+//! - Define a default handler using the [`exception!`] macro. This function will be used to handle
+//! all interrupts and exceptions which have not been assigned a specific handler.
 
 #![no_main] // <- IMPORTANT!
 #![no_std]
 
 extern crate cortex_m;
-#[macro_use(main, exception, interrupts)]
+
+#[macro_use(entry, exception)]
 extern crate cortex_m_rt as rt;
-extern crate panic_abort; // panicking behavior
+
+// makes `panic!` print messages to the host stderr using semihosting
+extern crate panic_semihosting;
 
 use cortex_m::asm;
 use rt::ExceptionFrame;
 
-// the program entry point
-main!(main);
+// the program entry point is ...
+entry!(main);
 
-#[inline(always)]
+// ... this never ending function
 fn main() -> ! {
-    asm::bkpt();
-
-    loop {}
-}
-
-// define the default exception handler
-exception!(DefaultHandler, deh);
-
-#[inline(always)]
-fn deh(_nr: u8) {
-    asm::bkpt();
+    loop {
+        asm::bkpt();
+    }
 }
 
 // define the hard fault handler
-exception!(HardFault, hf);
+exception!(HardFault, hard_fault);
 
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
 }
 
-// bind all interrupts to the default exception handler
-interrupts!(DefaultHandler);
+// define the default exception handler
+exception!(*, default_handler);
+
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
+}

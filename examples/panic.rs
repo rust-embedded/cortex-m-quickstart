@@ -1,7 +1,6 @@
 //! Changing the panic handler
 //!
-//! The easiest way to change the panic handler is to use a different [panic implementation
-//! crate][0].
+//! The easiest way to change the panic handler is to use a different [panic handler crate][0].
 //!
 //! [0]: https://crates.io/keywords/panic-impl
 //!
@@ -10,36 +9,35 @@
 #![no_main]
 #![no_std]
 
-extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt as rt;
-// extern crate panic_abort;
-extern crate panic_semihosting; // reports panic messages to the host stderr using semihosting
 
-use cortex_m::asm;
+// Pick one of these two panic handlers:
+
+// Reports panic messages to the host stderr using semihosting
+extern crate panic_semihosting;
+
+// Logs panic messages using the ITM (Instrumentation Trace Macrocell)
+// extern crate panic_itm;
+
 use rt::ExceptionFrame;
 
-main!(main);
+entry!(main);
 
-#[inline(always)]
 fn main() -> ! {
     panic!("Oops")
 }
 
-exception!(DefaultHandler, deh);
+// define the hard fault handler
+exception!(HardFault, hard_fault);
 
-#[inline(always)]
-fn deh(_nr: u8) {
-    asm::bkpt();
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
 }
 
-exception!(HardFault, hf);
+// define the default exception handler
+exception!(*, default_handler);
 
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }
-
-interrupts!(DefaultHandler);

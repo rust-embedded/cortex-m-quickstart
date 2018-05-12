@@ -1,11 +1,12 @@
 //! Debugging a crash (exception)
 //!
-//! The `cortex-m-rt` crate provides functionality for this through a default exception handler.
-//! When an exception is hit, the default handler will trigger a breakpoint and in this debugging
-//! context the stacked registers are accessible.
+//! Most crash conditions trigger a hard fault exception, whose handler is defined via
+//! `exception!(HardFault, ..)`. The `HardFault` handler has access to the exception frame, a
+//! snapshot of the CPU registers at the moment of the exception.
 //!
-//! In you run the example below, you'll be able to inspect the state of your program under the
-//! debugger using these commands:
+//! This program crashes and the `HardFault` handler prints to the console the contents of the
+//! `ExceptionFrame` and then triggers a breakpoint. From that breakpoint one can see the backtrace
+//! that led to the exception.
 //!
 //! ``` text
 //! (gdb) continue
@@ -13,58 +14,65 @@
 //! __bkpt () at asm/bkpt.s:3
 //! 3         bkpt
 //!
-//! (gdb) finish
-//! Run till exit from #0  __bkpt () at asm/bkpt.s:3
-//! Note: automatically using hardware breakpoints for read-only addresses.
-//! crash::hf (_ef=0x20004fa0) at examples/crash.rs:102
-//! 99         asm::bkpt();
-//!
-//! (gdb) # Exception frame = program state during the crash
-//! (gdb) print/x *_ef
-//! $1 = cortex_m_rt::ExceptionFrame {
-//!   r0: 0x2fffffff,
-//!   r1: 0x2fffffff,
-//!   r2: 0x80006b0,
-//!   r3: 0x80006b0,
-//!   r12: 0x20000000,
-//!   lr: 0x800040f,
-//!   pc: 0x800066a,
-//!   xpsr: 0x61000000
-//! }
-//!
-//! (gdb) # Where did we come from?
 //! (gdb) backtrace
-//! #0  crash::hf (_ef=0x20004fa0) at examples/crash.rs:102
-//! #1  0x080004ac in UserHardFault (ef=0x20004fa0) at <exception macros>:9
-//! #2  <signal handler called>
-//! #3  0x0800066a in core::ptr::read_volatile (src=0x2fffffff) at /checkout/src/libcore/ptr.rs:452
-//! #4  0x0800040e in crash::main () at examples/crash.rs:85
-//! #5  0x08000456 in main () at <main macros>:3
+//! #0  __bkpt () at asm/bkpt.s:3
+//! #1  0x080030b4 in cortex_m::asm::bkpt () at $$/cortex-m-0.5.0/src/asm.rs:19
+//! #2  rust_begin_unwind (args=..., file=..., line=99, col=5) at $$/panic-semihosting-0.2.0/src/lib.rs:87
+//! #3  0x08001d06 in core::panicking::panic_fmt () at libcore/panicking.rs:71
+//! #4  0x080004a6 in crash::hard_fault (ef=0x20004fa0) at examples/crash.rs:99
+//! #5  0x08000548 in UserHardFault (ef=0x20004fa0) at <exception macros>:10
+//! #6  0x0800093a in HardFault () at asm.s:5
+//! Backtrace stopped: previous frame identical to this frame (corrupt stack?)
+//! ```
 //!
-//! (gdb) # Nail down the location of the crash
-//! (gdb) disassemble/m _ef.pc
+//! In the console output one will find the state of the Program Counter (PC) register at the time
+//! of the exception.
+//!
+//! ``` text
+//! panicked at 'HardFault at ExceptionFrame {
+//!     r0: 0x2fffffff,
+//!     r1: 0x2fffffff,
+//!     r2: 0x080051d4,
+//!     r3: 0x080051d4,
+//!     r12: 0x20000000,
+//!     lr: 0x08000435,
+//!     pc: 0x08000ab6,
+//!     xpsr: 0x61000000
+//! }', examples/crash.rs:106:5
+//! ```
+//!
+//! This register contains the address of the instruction that caused the exception. In GDB one can
+//! disassemble the program around this address to observe the instruction that caused the
+//! exception.
+//!
+//! ``` text
+//! (gdb) disassemble/m 0x08000ab6
 //! Dump of assembler code for function core::ptr::read_volatile:
-//! 451     pub unsafe fn read_volatile<T>(src: *const T) -> T {}
-//!    0x08000662 <+0>:     sub     sp, #16
-//!    0x08000664 <+2>:     mov     r1, r0
-//!    0x08000666 <+4>:     str     r0, [sp, #8]
+//! 451     pub unsafe fn read_volatile<T>(src: *const T) -> T {
+//!    0x08000aae <+0>:     sub     sp, #16
+//!    0x08000ab0 <+2>:     mov     r1, r0
+//!    0x08000ab2 <+4>:     str     r0, [sp, #8]
 //!
 //! 452         intrinsics::volatile_load(src)
-//!    0x08000668 <+6>:     ldr     r0, [sp, #8]
-//!    0x0800066a <+8>:     ldr     r0, [r0, #0]
-//!    0x0800066c <+10>:    str     r0, [sp, #12]
-//!    0x0800066e <+12>:    ldr     r0, [sp, #12]
-//!    0x08000670 <+14>:    str     r1, [sp, #4]
-//!    0x08000672 <+16>:    str     r0, [sp, #0]
-//!    0x08000674 <+18>:    b.n     0x8000676 <core::ptr::read_volatile+20>
+//!    0x08000ab4 <+6>:     ldr     r0, [sp, #8]
+//! -> 0x08000ab6 <+8>:     ldr     r0, [r0, #0]
+//!    0x08000ab8 <+10>:    str     r0, [sp, #12]
+//!    0x08000aba <+12>:    ldr     r0, [sp, #12]
+//!    0x08000abc <+14>:    str     r1, [sp, #4]
+//!    0x08000abe <+16>:    str     r0, [sp, #0]
+//!    0x08000ac0 <+18>:    b.n     0x8000ac2 <core::ptr::read_volatile+20>
 //!
 //! 453     }
-//!    0x08000676 <+20>:    ldr     r0, [sp, #0]
-//!    0x08000678 <+22>:    add     sp, #16
-//!    0x0800067a <+24>:    bx      lr
+//!    0x08000ac2 <+20>:    ldr     r0, [sp, #0]
+//!    0x08000ac4 <+22>:    add     sp, #16
+//!    0x08000ac6 <+24>:    bx      lr
 //!
 //! End of assembler dump.
 //! ```
+//!
+//! `ldr r0, [r0, #0]` caused the exception. This instruction tried to load (read) a 32-bit word
+//! from the address stored in the register `r0`. Looking again at the contents of `ExceptionFrame`
+//! we see that the `r0` contained the address `0x2FFF_FFFF` when this instruction was executed.
 //!
 //! ---
 
@@ -74,38 +82,33 @@
 extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt as rt;
-extern crate panic_abort;
+extern crate panic_semihosting;
 
 use core::ptr;
 
-use cortex_m::asm;
 use rt::ExceptionFrame;
 
-main!(main);
+entry!(main);
 
-#[inline(always)]
 fn main() -> ! {
     unsafe {
+        // read an address outside of the RAM region; causes a HardFault exception
         ptr::read_volatile(0x2FFF_FFFF as *const u32);
     }
 
     loop {}
 }
 
-exception!(DefaultHandler, dh);
+// define the hard fault handler
+exception!(HardFault, hard_fault);
 
-#[inline(always)]
-fn dh(_nr: u8) {
-    asm::bkpt();
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
 }
 
-exception!(HardFault, hf);
+// define the default exception handler
+exception!(*, default_handler);
 
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }
-
-interrupts!(DefaultHandler);

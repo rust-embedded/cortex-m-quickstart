@@ -11,6 +11,7 @@
 
 #![feature(alloc)]
 #![feature(global_allocator)]
+#![feature(lang_items)]
 #![no_main]
 #![no_std]
 
@@ -22,7 +23,7 @@ extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt as rt;
 extern crate cortex_m_semihosting as sh;
-extern crate panic_abort;
+extern crate panic_semihosting;
 
 use core::fmt::Write;
 
@@ -31,15 +32,16 @@ use cortex_m::asm;
 use rt::ExceptionFrame;
 use sh::hio;
 
+// this is the allocator the application will use
 #[global_allocator]
 static ALLOCATOR: CortexMHeap = CortexMHeap::empty();
 
 const HEAP_SIZE: usize = 1024; // in bytes
 
-main!(main);
+entry!(main);
 
 fn main() -> ! {
-    // Initialize the allocator
+    // Initialize the allocator BEFORE you use it
     unsafe { ALLOCATOR.init(rt::heap_start() as usize, HEAP_SIZE) }
 
     // Growable array allocated on the heap
@@ -51,20 +53,23 @@ fn main() -> ! {
     loop {}
 }
 
-exception!(DefaultHandler, dh);
-
-#[inline(always)]
-fn dh(_nr: u8) {
-    asm::bkpt();
-}
-
-exception!(HardFault, hf);
-
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
+// define what happens in an Out Of Memory (OOM) condition
+#[lang = "oom"]
+#[no_mangle]
+pub fn rust_oom() -> ! {
     asm::bkpt();
 
     loop {}
 }
 
-interrupts!(DefaultHandler);
+exception!(HardFault, hard_fault);
+
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
+}
+
+exception!(*, default_handler);
+
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
+}

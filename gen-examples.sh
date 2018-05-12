@@ -11,8 +11,8 @@ main() {
         panic
         crash
         exception
-        device
         allocator
+        device
     )
 
     rm -rf src/examples
@@ -20,7 +20,7 @@ main() {
     mkdir src/examples
 
     cat >src/examples/mod.rs <<'EOF'
-//! Examples
+//! Examples sorted in increasing degree of complexity
 // Auto-generated. Do not modify.
 EOF
 

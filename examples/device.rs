@@ -1,6 +1,6 @@
 //! Using a device crate
 //!
-//! Crates generated using [`svd2rust`] are referred to as device crates. These crates provides an
+//! Crates generated using [`svd2rust`] are referred to as device crates. These crates provide an
 //! API to access the peripherals of a device.
 //!
 //! [`svd2rust`]: https://crates.io/crates/svd2rust
@@ -19,9 +19,6 @@
 //! version = "0.10.0"
 //! ```
 //!
-//! The `stm32f103xx` crate provides an `interrupts.x` file so you must remove the one in the root
-//! of this crate.
-//!
 //! ---
 
 #![no_main]
@@ -33,17 +30,16 @@ extern crate cortex_m_rt as rt;
 extern crate cortex_m_semihosting as sh;
 #[macro_use]
 extern crate stm32f103xx;
-extern crate panic_abort;
+extern crate panic_semihosting;
 
 use core::fmt::Write;
 
-use cortex_m::asm;
 use cortex_m::peripheral::syst::SystClkSource;
 use rt::ExceptionFrame;
 use sh::hio::{self, HStdout};
 use stm32f103xx::Interrupt;
 
-main!(main);
+entry!(main);
 
 fn main() -> ! {
     let p = cortex_m::Peripherals::take().unwrap();
@@ -53,6 +49,7 @@ fn main() -> ! {
 
     nvic.enable(Interrupt::EXTI0);
 
+    // configure the system timer to wrap around every second
     syst.set_clock_source(SystClkSource::Core);
     syst.set_reload(8_000_000); // 1s
     syst.enable_counter();
@@ -66,6 +63,7 @@ fn main() -> ! {
     }
 }
 
+// try commenting out this line: you'll end in `default_handler` instead of in `exti0`
 interrupt!(EXTI0, exti0, state: Option<HStdout> = None);
 
 fn exti0(state: &mut Option<HStdout>) {
@@ -78,20 +76,14 @@ fn exti0(state: &mut Option<HStdout>) {
     }
 }
 
-exception!(DefaultHandler, deh);
+exception!(HardFault, hard_fault);
 
-#[inline(always)]
-fn deh(_nr: u8) {
-    asm::bkpt();
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("HardFault at {:#?}", ef);
 }
 
-exception!(HardFault, hf);
+exception!(*, default_handler);
 
-#[inline(always)]
-fn hf(_ef: &ExceptionFrame) -> ! {
-    asm::bkpt();
-
-    loop {}
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }
-
-interrupts!(DefaultHandler);

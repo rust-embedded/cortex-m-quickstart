@@ -6,33 +6,24 @@ keywords = ["arm", "cortex-m", "template"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-quickstart"
 repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.2.7"
+version = "0.3.0"
 
 [dependencies]
-# cortex-m-rt = "0.5.0"
-cortex-m-rt = { git = "https://github.com/japaric/cortex-m-rt", branch = "stable" }
-panic-abort = "0.1.1"
-# panic-semihosting = "0.1.1"
-panic-semihosting = { git = "https://github.com/japaric/panic-semihosting", branch = "stable" }
+cortex-m = "0.5.0"
+cortex-m-rt = "0.5.0"
+cortex-m-semihosting = "0.3.0"
+panic-itm = "0.1.1"
+panic-semihosting = "0.2.0"
+
 # Uncomment for the allocator example.
-#alloc-cortex-m = "0.3.3"
-
-[dependencies.cortex-m]
-branch = "stable"
-default-features = false
-git = "https://github.com/japaric/cortex-m"
-# version = "0.4.4"
-
-[dependencies.cortex-m-semihosting]
-default-features = false
-version = "0.2.1"
+# alloc-cortex-m = "0.3.6"
 
 # Uncomment for the device example.
 # [dependencies.stm32f103xx]
 # features = ["rt"]
-# version = "0.9.0"
+# version = "0.10.0"
 
 [profile.release]
+codegen-units = 1 # better optimizations
 debug = true
 lto = true
-opt-level = "s" # TODO remove; this flag requires nightly
