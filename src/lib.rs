@@ -135,12 +135,27 @@
 //!
 //! # Examples
 //!
-//! Check the [examples module](./examples/index.html)
+//! Check the [examples module][examples]
+//!
+//! [examples]: ./examples/index.html
 //!
 //! # Troubleshooting
 //!
 //! This section contains fixes for common errors encountered when the
 //! `cortex-m-quickstart` template is misused.
+//!
+//! ## Used the standard `main` interface
+//!
+//! Error message:
+//!
+//! ``` text
+//! $ cargo build
+//!    Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
+//!
+//! error: requires `start` lang_item
+//! ```
+//!
+//! Solution: Use `#![no_main]` and `entry!` as shown in the [examples].
 //!
 //! ## Forgot to launch an OpenOCD instance
 //!
