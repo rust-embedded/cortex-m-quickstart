@@ -27,7 +27,7 @@
 //! 2) Clone this crate
 //!
 //! ``` text
-//! $ git clone cortex-m-quickstart --vers 0.3.0
+//! $ cargo clone cortex-m-quickstart --vers 0.3.0
 //! ```
 //!
 //! 3) Change the crate name, author and version
