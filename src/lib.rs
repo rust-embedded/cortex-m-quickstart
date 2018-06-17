@@ -4,9 +4,15 @@
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
-//! - ARM toolchain: `sudo apt-get install gcc-arm-none-eabi` (on Ubuntu)
-//! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
-//! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
+//! - Embedded toolchain (ARM, ...):
+//!   - `sudo apt install gcc-arm-none-eabi` (on Ubuntu)
+//!   - `sudo dnf install arm-none-eabi-gcc` (on Fedora)
+//! - GDB:
+//!   - `sudo apt install gdb-arm-none-eabi` (on Ubuntu)
+//!   - `sudo dnf install arm-none-eabi-gdb` (on Fedora)
+//! - OpenOCD:
+//!   - `sudo apt install OpenOCD` (on Ubuntu)
+//!   - `sudo dnf install openocd` (on Fedora)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
 //!
 //! # Usage
