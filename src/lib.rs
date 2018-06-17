@@ -36,10 +36,11 @@
 //! $ cargo clone cortex-m-quickstart --vers 0.3.0
 //! ```
 //!
-//! 3) Change the crate name, author and version
+//! 3) Update/modify `Cargo.toml` with the crate name, authors and version
+//! using your favorite text editor
 //!
 //! ``` text
-//! $ edit Cargo.toml && head $_
+//! $ cat Cargo.toml
 //! [package]
 //! authors = ["Jorge Aparicio <jorge@japaric.io>"]
 //! name = "demo"
