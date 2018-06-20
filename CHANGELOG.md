@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.2] - 2018-06-19
+
+### Fixed
+
+- Bumped the panic-semihosting dependency to fix some examples when compiling with latest nightly.
+
 ## [v0.3.1] - 2018-05-13
 
 - Document the standard `main` interface issue in the troubleshooting guide.
@@ -172,7 +178,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.2...HEAD
+[v0.3.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.7...v0.3.0
 [v0.2.7]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.6...v0.2.7
