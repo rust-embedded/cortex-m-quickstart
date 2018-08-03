@@ -3,11 +3,6 @@ runner = 'arm-none-eabi-gdb'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
-
-  # uncomment to use rustc LLD to link programs (a)
-  # "-C", "link-arg=-Tlink.x",
-  # "-C", "linker=lld",
-  # "-Z", "linker-flavor=ld.lld",
 ]
 
 [target.thumbv7m-none-eabi]
@@ -15,11 +10,6 @@ runner = 'arm-none-eabi-gdb'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
-
-  # uncomment to use rustc LLD to link programs (a)
-  # "-C", "link-arg=-Tlink.x",
-  # "-C", "linker=lld",
-  # "-Z", "linker-flavor=ld.lld",
 ]
 
 [target.thumbv7em-none-eabi]
@@ -27,11 +17,6 @@ runner = 'arm-none-eabi-gdb'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
-
-  # uncomment to use rustc LLD to link programs (a)
-  # "-C", "link-arg=-Tlink.x",
-  # "-C", "linker=lld",
-  # "-Z", "linker-flavor=ld.lld",
 ]
 
 [target.thumbv7em-none-eabihf]
@@ -39,12 +24,4 @@ runner = 'arm-none-eabi-gdb'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
-
-  # uncomment to use rustc LLD to link programs (a)
-  # "-C", "link-arg=-Tlink.x",
-  # "-C", "linker=lld",
-  # "-Z", "linker-flavor=ld.lld",
 ]
-
-# (a) you also need to comment out the other two `link-arg` lines. But note that as of v0.6.0 LLD
-# has a bug where it mislinks FFI calls and they up crashing the program at runtime

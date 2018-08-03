@@ -10,6 +10,7 @@
 //! ---
 
 #![feature(alloc)]
+#![feature(alloc_error_handler)]
 #![feature(global_allocator)]
 #![feature(lang_items)]
 #![no_main]
@@ -25,6 +26,7 @@ extern crate cortex_m_rt as rt;
 extern crate cortex_m_semihosting as sh;
 extern crate panic_semihosting;
 
+use core::alloc::Layout;
 use core::fmt::Write;
 
 use alloc_cortex_m::CortexMHeap;
@@ -54,9 +56,9 @@ fn main() -> ! {
 }
 
 // define what happens in an Out Of Memory (OOM) condition
-#[lang = "oom"]
+#[alloc_error_handler]
 #[no_mangle]
-pub fn rust_oom() -> ! {
+pub fn alloc_error(layout: Layout) -> ! {
     asm::bkpt();
 
     loop {}
