@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.3] - 2018-08-07
+
+### Changed
+
+- Stopped recommending LLD as it requires an unstable feature.
+
+### Fixed
+
+- The allocator example. It now uses the `#[alloc_error_handler]` attribute
+  instead of the unstable `oom` lang item.
+
 ## [v0.3.2] - 2018-06-19
 
 ### Fixed
@@ -178,7 +189,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.3...HEAD
+[v0.3.3]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/japaric/cortex-m-quickstart/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/cortex-m-quickstart/compare/v0.2.7...v0.3.0

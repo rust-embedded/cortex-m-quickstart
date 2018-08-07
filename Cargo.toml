@@ -6,7 +6,7 @@ keywords = ["arm", "cortex-m", "template"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-quickstart"
 repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.3.2"
+version = "0.3.3"
 
 [dependencies]
 cortex-m = "0.5.0"
