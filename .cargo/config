@@ -1,27 +1,56 @@
 [target.thumbv6m-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  # LLD (shipped with the Rust toolchain) is used as the default linker
+  "-C", "link-arg=-Tlink.x",
+
+  # if you run into problems with LLD switch to the GNU linker by commenting out
+  # this line
+  # "-C", "linker=arm-none-eabi-ld",
+
+  # if you need to link to pre-compiled C libraries provided by a C toolchain
+  # use GCC as the linker by commenting out both lines above and then
+  # uncommenting the three lines below
+  # "-C", "linker=arm-none-eabi-gcc",
+  # "-C", "link-arg=-Wl,-Tlink.x",
+  # "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7m-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  # the comments under `[target.thumbv6m-none-eabi]` also apply here
+  "-C", "link-arg=-Tlink.x",
+
+  # "-C", "linker=arm-none-eabi-ld",
+
+  # "-C", "linker=arm-none-eabi-gcc",
+  # "-C", "link-arg=-Wl,-Tlink.x",
+  # "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7em-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  # the comments under `[target.thumbv6m-none-eabi]` also apply here
+  "-C", "link-arg=-Tlink.x",
+
+  # "-C", "linker=arm-none-eabi-ld",
+
+  # "-C", "linker=arm-none-eabi-gcc",
+  # "-C", "link-arg=-Wl,-Tlink.x",
+  # "-C", "link-arg=-nostartfiles",
 ]
 
 [target.thumbv7em-none-eabihf]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  # the comments under `[target.thumbv6m-none-eabi]` also apply here
+  "-C", "link-arg=-Tlink.x",
+
+  # "-C", "linker=arm-none-eabi-ld",
+
+  # "-C", "linker=arm-none-eabi-gcc",
+  # "-C", "link-arg=-Wl,-Tlink.x",
+  # "-C", "link-arg=-nostartfiles",
 ]

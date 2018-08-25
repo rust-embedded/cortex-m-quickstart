@@ -4,7 +4,6 @@
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
-//! - ARM toolchain: `sudo apt-get install gcc-arm-none-eabi` (on Ubuntu)
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
@@ -179,11 +178,13 @@
 //! ``` text
 //! $ cargo build
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
-//! error: linking with `arm-none-eabi-ld` failed: exit code: 1
+//! error: linking with `rust-lld` failed: exit code: 1
 //! |
-//! = note: "arm-none-eabi-gcc" "-L" (..)
+//! = note: "rust-lld" "-flavor" "gnu" "-L" (..)
 //! (..)
-//!           (..)/ld: region `FLASH' overflowed by XXX bytes
+//!  = note: rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by X bytes
+//!          rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by Y bytes
+//! (..)
 //! ```
 //!
 //! Solution: Specify your device memory layout in the `memory.x` linker script. See [Usage]
