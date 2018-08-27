@@ -67,4 +67,6 @@ EOF
     rm -rf $td
 }
 
-main
+if [ $TARGET != x86_64-unknown-linux-gnu ]; then
+    main
+fi

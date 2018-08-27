@@ -1,7 +1,9 @@
 set -euxo pipefail
 
 main() {
-    rustup target add $TARGET
+    if [ $TARGET != x86_64-unknown-linux-gnu ]; then
+        rustup target add $TARGET
+    fi
 }
 
 main
