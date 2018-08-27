@@ -9,9 +9,9 @@ repository = "https://github.com/japaric/cortex-m-quickstart"
 version = "0.3.3"
 
 [dependencies]
-cortex-m = "0.5.0"
-cortex-m-rt = "0.5.0"
-cortex-m-semihosting = "0.3.0"
+cortex-m = "0.5.6"
+cortex-m-rt = "0.5.3"
+cortex-m-semihosting = "0.3.1"
 panic-semihosting = "0.3.0"
 
 # Uncomment for the panic example.
