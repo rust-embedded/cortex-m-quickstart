@@ -207,24 +207,15 @@
 //!
 //! ## Overwrote the original `.cargo/config` file
 //!
-//! Error message:
+//! You won't get an error message but the output binary will be empty
 //!
 //! ``` text
-//! error: linking with `arm-none-eabi-gcc` failed: exit code: 1
-//!   |
-//!   = note: (..)
-//! (..)
-//! (..)/crt0.o: In function `_start':
-//! (.text+0x90): undefined reference to `memset'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xd0): undefined reference to `atexit'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xd4): undefined reference to `__libc_init_array'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xe4): undefined reference to `exit'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0x100): undefined reference to `__libc_fini_array'
-//! collect2: error: ld returned 1 exit status
+//! $ cargo build && echo OK
+//! OK
+//!
+//! $ size target/thumbv7m-none-eabi/debug/app
+//!    text    data     bss     dec     hex filename
+//!       0       0       0       0       0 target/thumbv7m-none-eabi/debug/app
 //! ```
 //!
 //! Solution: You probably overwrote the original `.cargo/config` instead of appending the default
