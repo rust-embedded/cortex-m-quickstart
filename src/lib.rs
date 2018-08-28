@@ -2,7 +2,7 @@
 //!
 //! # Dependencies
 //!
-//! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
+//! - Nightly Rust toolchain from 2018-08-28 or newer: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
@@ -26,7 +26,7 @@
 //! 2) Clone this crate
 //!
 //! ``` text
-//! $ cargo clone cortex-m-quickstart --vers 0.3.0
+//! $ cargo clone cortex-m-quickstart --vers 0.3.4
 //! ```
 //!
 //! 3) Change the crate name, author and version

@@ -4,7 +4,7 @@
 
 This project is developed and maintained by the [Cortex-M team][team].
 
-# [Documentation](https://docs.rs/cortex-m-quickstart)
+# [Documentation](https://rust-embedded.github.io/cortex-m-quickstart/cortex_m_quickstart)
 
 # License
 
