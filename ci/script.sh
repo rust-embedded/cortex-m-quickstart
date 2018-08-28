@@ -61,10 +61,12 @@ EOF
         examples+=( $ex )
     fi
 
-    IFS=,;eval arm-none-eabi-size target/$TARGET/release/examples/"{${examples[*]}}"
+    IFS=,;eval size target/$TARGET/release/examples/"{${examples[*]}}"
 
     popd
     rm -rf $td
 }
 
-main
+if [ $TARGET != x86_64-unknown-linux-gnu ]; then
+    main
+fi

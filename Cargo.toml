@@ -2,16 +2,17 @@
 authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["embedded", "no-std"]
 description = "A template for building applications for ARM Cortex-M microcontrollers"
+documentation = "https://rust-embedded.github.io/cortex-m-quickstart/cortex_m_quickstart"
 keywords = ["arm", "cortex-m", "template"]
 license = "MIT OR Apache-2.0"
 name = "cortex-m-quickstart"
 repository = "https://github.com/japaric/cortex-m-quickstart"
-version = "0.3.3"
+version = "0.3.4"
 
 [dependencies]
-cortex-m = "0.5.0"
-cortex-m-rt = "0.5.0"
-cortex-m-semihosting = "0.3.0"
+cortex-m = "0.5.6"
+cortex-m-rt = "0.5.3"
+cortex-m-semihosting = "0.3.1"
 panic-semihosting = "0.3.0"
 
 # Uncomment for the panic example.

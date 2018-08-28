@@ -4,7 +4,6 @@
 //!
 //! - Nightly Rust toolchain newer than `nightly-2018-04-08`: `rustup default nightly`
 //! - Cargo `clone` subcommand: `cargo install cargo-clone`
-//! - ARM toolchain: `sudo apt-get install gcc-arm-none-eabi` (on Ubuntu)
 //! - GDB: `sudo apt-get install gdb-arm-none-eabi` (on Ubuntu)
 //! - OpenOCD: `sudo apt-get install OpenOCD` (on Ubuntu)
 //! - [Optional] Cargo `add` subcommand: `cargo install cargo-edit`
@@ -179,11 +178,13 @@
 //! ``` text
 //! $ cargo build
 //! Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
-//! error: linking with `arm-none-eabi-ld` failed: exit code: 1
+//! error: linking with `rust-lld` failed: exit code: 1
 //! |
-//! = note: "arm-none-eabi-gcc" "-L" (..)
+//! = note: "rust-lld" "-flavor" "gnu" "-L" (..)
 //! (..)
-//!           (..)/ld: region `FLASH' overflowed by XXX bytes
+//!  = note: rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by X bytes
+//!          rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by Y bytes
+//! (..)
 //! ```
 //!
 //! Solution: Specify your device memory layout in the `memory.x` linker script. See [Usage]
@@ -206,24 +207,15 @@
 //!
 //! ## Overwrote the original `.cargo/config` file
 //!
-//! Error message:
+//! You won't get an error message but the output binary will be empty
 //!
 //! ``` text
-//! error: linking with `arm-none-eabi-gcc` failed: exit code: 1
-//!   |
-//!   = note: (..)
-//! (..)
-//! (..)/crt0.o: In function `_start':
-//! (.text+0x90): undefined reference to `memset'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xd0): undefined reference to `atexit'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xd4): undefined reference to `__libc_init_array'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0xe4): undefined reference to `exit'
-//! (..)/crt0.o: In function `_start':
-//! (.text+0x100): undefined reference to `__libc_fini_array'
-//! collect2: error: ld returned 1 exit status
+//! $ cargo build && echo OK
+//! OK
+//!
+//! $ size target/thumbv7m-none-eabi/debug/app
+//!    text    data     bss     dec     hex filename
+//!       0       0       0       0       0 target/thumbv7m-none-eabi/debug/app
 //! ```
 //!
 //! Solution: You probably overwrote the original `.cargo/config` instead of appending the default
