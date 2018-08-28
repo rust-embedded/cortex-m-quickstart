@@ -11,7 +11,6 @@
 
 #![feature(alloc)]
 #![feature(alloc_error_handler)]
-#![feature(global_allocator)]
 #![feature(lang_items)]
 #![no_main]
 #![no_std]
@@ -58,7 +57,7 @@ fn main() -> ! {
 // define what happens in an Out Of Memory (OOM) condition
 #[alloc_error_handler]
 #[no_mangle]
-pub fn alloc_error(layout: Layout) -> ! {
+pub fn alloc_error(_layout: Layout) -> ! {
     asm::bkpt();
 
     loop {}

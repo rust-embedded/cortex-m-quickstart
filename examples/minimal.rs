@@ -21,14 +21,13 @@
 
 extern crate cortex_m;
 
-#[macro_use(entry, exception)]
+#[macro_use(entry)]
 extern crate cortex_m_rt as rt;
 
 // makes `panic!` print messages to the host stderr using semihosting
 extern crate panic_semihosting;
 
 use cortex_m::asm;
-use rt::ExceptionFrame;
 
 // the program entry point is ...
 entry!(main);
