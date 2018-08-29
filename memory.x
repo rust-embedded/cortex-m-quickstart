@@ -2,8 +2,9 @@ MEMORY
 {
   /* NOTE K = KiBi = 1024 bytes */
   /* TODO Adjust these memory regions to match your device memory layout */
-  FLASH : ORIGIN = 0x000BAAD0, LENGTH = 0K
-  RAM : ORIGIN = 0xBAAD0000, LENGTH = 0K
+  /* These values correspond to the LM3S6965, one of the few devices QEMU can emulate */
+  FLASH : ORIGIN = 0x00000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
 /* This is where the call stack will be allocated. */
