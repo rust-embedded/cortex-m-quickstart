@@ -1,5 +1,5 @@
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
-runner = 'arm-none-eabi-gdb -x debug.gdb'
+# runner = 'arm-none-eabi-gdb -x debug.gdb'
 rustflags = [
   # LLD (shipped with the Rust toolchain) is used as the default linker
   "-C", "link-arg=-Tlink.x",
@@ -15,6 +15,20 @@ rustflags = [
   # "-C", "link-arg=-Wl,-Tlink.x",
   # "-C", "link-arg=-nostartfiles",
 ]
+
+# work around rust-lang/cargo#5946
+[target.thumbv6m-none-eabi]
+runner = 'arm-none-eabi-gdb -x debug.gdb'
+
+[target.thumbv7m-none-eabi]
+runner = 'arm-none-eabi-gdb -x debug.gdb'
+
+[target.thumbv7em-none-eabi]
+runner = 'arm-none-eabi-gdb -x debug.gdb'
+
+[target.thumbv7em-none-eabihf]
+runner = 'arm-none-eabi-gdb -x debug.gdb'
+# end of workaround
 
 [build]
 # Pick one of these compilation targets
