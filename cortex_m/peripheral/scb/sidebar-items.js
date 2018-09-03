@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Exception","Processor core exceptions (internal interrupts)"],["VectActive","Active exception number"]],"struct":[["RegisterBlock","Register block"]]});

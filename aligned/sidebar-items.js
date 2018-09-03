@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["Aligned","`Aligned` constructor"]],"struct":[["Aligned","An `ARRAY` aligned to `mem::align_of::<ALIGNMENT>()` bytes"]],"trait":[["Alignment","IMPLEMENTATION DETAIL"]]});

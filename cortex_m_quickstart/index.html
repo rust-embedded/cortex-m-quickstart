@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `cortex_m_quickstart` crate."><meta name="keywords" content="rust, rustlang, rust-lang, cortex_m_quickstart"><title>cortex_m_quickstart - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate cortex_m_quickstart</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'cortex_m_quickstart', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/cortex_m_quickstart/lib.rs.html#1-342' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>cortex_m_quickstart</a></span></h1><div class='docblock'><p>A template for building applications for ARM Cortex-M microcontrollers</p>
+<h1 id="dependencies" class="section-header"><a href="#dependencies">Dependencies</a></h1>
+<ul>
+<li>Nightly Rust toolchain from 2018-08-28 or newer: <code>rustup default nightly</code></li>
+<li>Cargo <code>clone</code> subcommand: <code>cargo install cargo-clone</code></li>
+<li>GDB: <code>sudo apt-get install gdb-arm-none-eabi</code> (on Ubuntu)</li>
+<li>OpenOCD: <code>sudo apt-get install OpenOCD</code> (on Ubuntu)</li>
+<li>[Optional] Cargo <code>add</code> subcommand: <code>cargo install cargo-edit</code></li>
+</ul>
+<h1 id="usage" class="section-header"><a href="#usage">Usage</a></h1>
+<ol start="0">
+<li>
+<p>Figure out the cross compilation <em>target</em> to use.</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>Use <code>thumbv6m-none-eabi</code> for ARM Cortex-M0 and Cortex-M0+</p>
+</li>
+<li>
+<p>Use <code>thumbv7m-none-eabi</code> for ARM Cortex-M3</p>
+</li>
+<li>
+<p>Use <code>thumbv7em-none-eabi</code> for ARM Cortex-M4 and Cortex-M7 (<em>no</em> FPU support)</p>
+</li>
+<li>
+<p>Use <code>thumbv7em-none-eabihf</code> for ARM Cortex-M4<strong>F</strong> and Cortex-M7<strong>F</strong> (<em>with</em> FPU support)</p>
+</li>
+</ul>
+<ol>
+<li>Install the <code>rust-std</code> component for your target, if you haven't done so already</li>
+</ol>
+<pre><code class="language-console">$ rustup target add thumbv7em-none-eabihf
+</code></pre>
+<ol start="2">
+<li>Clone this crate</li>
+</ol>
+<pre><code class="language-text">$ cargo clone cortex-m-quickstart --vers 0.3.4
+</code></pre>
+<ol start="3">
+<li>Change the crate name, author and version</li>
+</ol>
+<pre><code class="language-text">$ edit Cargo.toml &amp;&amp; head $_
+[package]
+authors = [&quot;Jorge Aparicio &lt;jorge@japaric.io&gt;&quot;]
+name = &quot;demo&quot;
+version = &quot;0.1.0&quot;
+</code></pre>
+<ol start="4">
+<li>Specify the memory layout of the target device</li>
+</ol>
+<p><strong>NOTE</strong> board support crates sometimes provide this file for you (check the crate
+documentation). If you are using one that does then remove <em>both</em> <code>memory.x</code> and <code>build.rs</code> from
+the root of this crate.</p>
+<pre><code class="language-text">$ cat &gt;memory.x &lt;&lt;'EOF'
+MEMORY
+{
+  /* NOTE K = KiBi = 1024 bytes */
+  FLASH : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 40K
+}
+EOF
+</code></pre>
+<ol start="5">
+<li>Optionally, set a default build target. This way you don't have to pass <code>--target</code> to each
+Cargo invocation.</li>
+</ol>
+<pre><code class="language-text">$ cat &gt;&gt;.cargo/config &lt;&lt;'EOF'
+[build]
+target = &quot;thumbv7em-none-eabihf&quot;
+EOF
+</code></pre>
+<ol start="6">
+<li>Optionally, depend on a device, HAL implementation or a board support crate.</li>
+</ol>
+<pre><code class="language-text">$ # add a device crate, OR
+$ cargo add stm32f30x
+
+$ # add a HAL implementation crate, OR
+$ cargo add stm32f30x-hal
+
+$ # add a board support crate
+$ cargo add f3
+</code></pre>
+<ol start="7">
+<li>Write the application or start from one of the examples</li>
+</ol>
+<pre><code class="language-text">$ rm -r src/* &amp;&amp; cp examples/hello.rs src/main.rs
+</code></pre>
+<ol start="8">
+<li>Build the application</li>
+</ol>
+<pre><code class="language-text">$ cargo build --release
+
+$ # sanity check
+$ arm-none-eabi-readelf -A target/thumbv7em-none-eabihf/release/demo
+Attribute Section: aeabi
+File Attributes
+  Tag_conformance: &quot;2.09&quot;
+  Tag_CPU_arch: v7E-M
+  Tag_CPU_arch_profile: Microcontroller
+  Tag_THUMB_ISA_use: Thumb-2
+  Tag_FP_arch: VFPv4-D16
+  Tag_ABI_PCS_GOT_use: direct
+  Tag_ABI_FP_denormal: Needed
+  Tag_ABI_FP_exceptions: Needed
+  Tag_ABI_FP_number_model: IEEE 754
+  Tag_ABI_align_needed: 8-byte
+  Tag_ABI_align_preserved: 8-byte, except leaf SP
+  Tag_ABI_HardFP_use: SP only
+  Tag_ABI_VFP_args: VFP registers
+  Tag_ABI_optimization_goals: Aggressive Speed
+  Tag_CPU_unaligned_access: v6
+  Tag_FP_HP_extension: Allowed
+  Tag_ABI_FP_16bit_format: IEEE 754
+</code></pre>
+<ol start="9">
+<li>Flash and debug the program</li>
+</ol>
+<pre><code class="language-text">$ # Launch OpenOCD on a terminal
+$ openocd -f (..)
+</code></pre>
+<pre><code class="language-text">$ # Start a debug session in another terminal
+$ arm-none-eabi-gdb target/thumbv7em-none-eabihf/release/demo
+</code></pre>
+<p>Alternatively, you can use <code>cargo run</code> to build, flash and debug the program in a single step.</p>
+<pre><code class="language-text">$ cargo run --example hello
+&gt; # drops you into a GDB session
+</code></pre>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Check the <a href="./examples/index.html">examples module</a></p>
+<h1 id="troubleshooting" class="section-header"><a href="#troubleshooting">Troubleshooting</a></h1>
+<p>This section contains fixes for common errors encountered when the
+<code>cortex-m-quickstart</code> template is misused.</p>
+<h2 id="used-the-standard-main-interface" class="section-header"><a href="#used-the-standard-main-interface">Used the standard <code>main</code> interface</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+   Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
+
+error: requires `start` lang_item
+</code></pre>
+<p>Solution: Use <code>#![no_main]</code> and <code>entry!</code> as shown in the <a href="./examples/index.html">examples</a>.</p>
+<h2 id="forgot-to-launch-an-openocd-instance" class="section-header"><a href="#forgot-to-launch-an-openocd-instance">Forgot to launch an OpenOCD instance</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ arm-none-eabi-gdb target/..
+Reading symbols from hello...done.
+.gdbinit:1: Error in sourced command file:
+:3333: Connection timed out.
+</code></pre>
+<p>Solution: Launch OpenOCD on other terminal. See <a href="./index.html#usage">Usage</a> section.</p>
+<h2 id="didnt-modify-the-memoryx-linker-script" class="section-header"><a href="#didnt-modify-the-memoryx-linker-script">Didn't modify the <code>memory.x</code> linker script</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+Compiling demo v0.1.0 (file:///home/japaric/tmp/demo)
+error: linking with `rust-lld` failed: exit code: 1
+|
+= note: &quot;rust-lld&quot; &quot;-flavor&quot; &quot;gnu&quot; &quot;-L&quot; (..)
+(..)
+ = note: rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by X bytes
+         rust-lld: error: section '.vector_table' will not fit in region 'FLASH': overflowed by Y bytes
+(..)
+</code></pre>
+<p>Solution: Specify your device memory layout in the <code>memory.x</code> linker script. See <a href="./index.html#usage">Usage</a>
+section.</p>
+<h2 id="didnt-set-a-default-build-target-and-forgot-to-pass---target-to-cargo" class="section-header"><a href="#didnt-set-a-default-build-target-and-forgot-to-pass---target-to-cargo">Didn't set a default build target and forgot to pass <code>--target</code> to Cargo</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+(..)
+error: language item required, but not found: `eh_personality`
+
+error: aborting due to previous error
+</code></pre>
+<p>Solution: Set a default build target in the <code>.cargo/config</code> file (see <a href="./index.html#usage">Usage</a> section), or call
+Cargo with <code>--target</code> flag: <code>cargo build --target thumbv7em-none-eabi</code>.</p>
+<h2 id="overwrote-the-original-cargoconfig-file" class="section-header"><a href="#overwrote-the-original-cargoconfig-file">Overwrote the original <code>.cargo/config</code> file</a></h2>
+<p>You won't get an error message but the output binary will be empty</p>
+<pre><code class="language-text">$ cargo build &amp;&amp; echo OK
+OK
+
+$ size target/thumbv7m-none-eabi/debug/app
+   text    data     bss     dec     hex filename
+      0       0       0       0       0 target/thumbv7m-none-eabi/debug/app
+</code></pre>
+<p>Solution: You probably overwrote the original <code>.cargo/config</code> instead of appending the default
+build target (e.g. <code>cat &gt;</code> instead of <code>cat &gt;&gt;</code>). The less error prone way to fix this is to
+remove the <code>.cargo</code> directory, clone a new copy of the template and then copy the <code>.cargo</code>
+directory from that fresh template into your current project. Don't forget to <em>append</em> the
+default build target to <code>.cargo/config</code>.</p>
+<h2 id="called-openocd-with-wrong-arguments" class="section-header"><a href="#called-openocd-with-wrong-arguments">Called OpenOCD with wrong arguments</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ openocd -f ..
+(..)
+Error: open failed
+in procedure 'init'
+in procedure 'ocd_bouncer'
+</code></pre>
+<p>Solution: Correct the OpenOCD arguments. Check the <code>/usr/share/openocd/scripts</code> directory (exact
+location varies per distribution / OS) for a list of scripts that can be used.</p>
+<h2 id="forgot-to-install-the-rust-std-component" class="section-header"><a href="#forgot-to-install-the-rust-std-component">Forgot to install the <code>rust-std</code> component</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+error[E0463]: can't find crate for `core`
+  |
+  = note: the `thumbv7m-none-eabi` target may not be installed
+</code></pre>
+<p>Solution: call <code>rustup target add thumbv7m-none-eabi</code> but with the name of your target</p>
+<h2 id="used-an-old-nightly" class="section-header"><a href="#used-an-old-nightly">Used an old nightly</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+Compiling cortex-m-rt v0.2.0
+error[E0463]: can't find crate for `core`
+|
+= note: the `thumbv7em-none-eabihf` target may not be installed
+
+error: aborting due to previous error
+</code></pre>
+<p>Solution: Use a more recent nightly</p>
+<h2 id="used-the-stable-toolchain" class="section-header"><a href="#used-the-stable-toolchain">Used the stable toolchain</a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo build
+error[E0463]: can't find crate for `core`
+  |
+  = note: the `thumbv7em-none-eabihf` target may not be installed
+</code></pre>
+<p>Solution: We are not there yet! Switch to the nightly toolchain with <code>rustup default nightly</code>.</p>
+<h2 id="used-gdb-instead-of-arm-none-eabi-gdb" class="section-header"><a href="#used-gdb-instead-of-arm-none-eabi-gdb">Used <code>gdb</code> instead of <code>arm-none-eabi-gdb</code></a></h2>
+<p>Error message:</p>
+<pre><code class="language-text">$ gdb target/..
+Reading symbols from hello...done.
+warning: Architecture rejected target-supplied description
+warning: Cannot convert floating-point register value to ..
+value has been optimized out
+Cannot write the dashboard
+Traceback (most recent call last):
+File &quot;&lt;string&gt;&quot;, line 353, in render
+File &quot;&lt;string&gt;&quot;, line 846, in lines
+gdb.error: Frame is invalid.
+0x00000000 in ?? ()
+semihosting is enabled
+Loading section .text, size 0xd88 lma 0x8000000
+Start address 0x8000000, load size 3464
+.gdbinit:6: Error in sourced command file:
+Remote connection closed
+</code></pre>
+<p>Solution: Use <code>arm-none-eabi-gdb target/..</code></p>
+<h1 id="used-a-named-piped-for-itmfifo" class="section-header"><a href="#used-a-named-piped-for-itmfifo">Used a named piped for <code>itm.fifo</code></a></h1>
+<p>Error message:</p>
+<pre><code class="language-text">$ cargo run [--example ..]
+
+Reading symbols from target/thumbv7em-none-eabihf/debug/cortex-m-quickstart...done.
+cortex_m_rt::reset_handler ()
+    at $REGISTRY/cortex-m-rt-0.3.12/src/lib.rs:330
+330     unsafe extern &quot;C&quot; fn reset_handler() -&gt; ! {
+semihosting is enabled
+Ignoring packet error, continuing...
+Ignoring packet error, continuing...
+</code></pre>
+<p>Note that when you reach this point OpenOCD will become unresponsive and you'll have to kill it
+and start a new OpenOCD process before you can invoke <code>cargo run</code> / start GDB.</p>
+<p>Cause: You uncommented the <code>monitor tpiu ..</code> line in <code>.gdbinit</code> and are using a named pipe to
+receive the ITM data (i.e. you ran <code>mkfifo itm.fifo</code>). This error occurs when <code>itmdump -f itm.fifo</code> (or equivalent, e.g. <code>cat itm.fifo</code>) is not running.</p>
+<p>Solution: Run <code>itmdump -f itm.fifo</code> (or equivalently <code>cat itm.fifo</code>) <em>before</em> invoking <code>cargo run</code> / starting GDB. Note that sometimes <code>itmdump</code> will exit when the GDB session ends. In that
+case you'll have to run <code>itmdump</code> before you start the next GDB session.</p>
+<p>Alternative solution: Use a plain text file instead of a named pipe. In this scenario you omit
+the <code>mkfifo itm.dump</code> command. You can use <code>itmdump</code>'s <em>follow</em> mode (-F) to get named pipe like
+output.</p>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="examples/index.html"
+                                  title='mod cortex_m_quickstart::examples'>examples</a></td>
+                           <td class='docblock-short'>
+                                <p>Examples sorted in increasing degree of complexity</p>
+
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "cortex_m_quickstart";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
