@@ -24,23 +24,17 @@
 #![no_main]
 #![no_std]
 
-extern crate cortex_m;
-#[macro_use]
-extern crate cortex_m_rt as rt;
-extern crate cortex_m_semihosting as sh;
-#[macro_use]
-extern crate stm32f103xx;
-extern crate panic_semihosting;
+#[allow(unused_extern_crates)]
+extern crate panic_halt;
 
 use core::fmt::Write;
 
 use cortex_m::peripheral::syst::SystClkSource;
-use rt::ExceptionFrame;
-use sh::hio::{self, HStdout};
-use stm32f103xx::Interrupt;
+use cortex_m_rt::entry;
+use cortex_m_semihosting::hio::{self, HStdout};
+use stm32f30x::{interrupt, Interrupt};
 
-entry!(main);
-
+#[entry]
 fn main() -> ! {
     let p = cortex_m::Peripherals::take().unwrap();
 
@@ -74,16 +68,4 @@ fn exti0(state: &mut Option<HStdout>) {
     if let Some(hstdout) = state.as_mut() {
         hstdout.write_str(".").unwrap();
     }
-}
-
-exception!(HardFault, hard_fault);
-
-fn hard_fault(ef: &ExceptionFrame) -> ! {
-    panic!("HardFault at {:#?}", ef);
-}
-
-exception!(*, default_handler);
-
-fn default_handler(irqn: i16) {
-    panic!("Unhandled exception (IRQn = {})", irqn);
 }

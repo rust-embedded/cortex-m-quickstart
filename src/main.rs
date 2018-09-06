@@ -1,19 +1,17 @@
-#![no_main]
 #![no_std]
+#![no_main]
 
-extern crate cortex_m;
-#[macro_use]
-extern crate cortex_m_rt;
-
-// TODO pick a panicking behavior
+// pick a panicking behavior
+extern crate panic_halt; // you can put a breakpoint on `rust_begin_unwind` to catch panics
 // extern crate panic_abort; // requires nightly
-// extern crate panic_itm; // requires ITM support
-// extern crate panic_semihosting; // requires a debugger
+// extern crate panic_itm; // logs messages over ITM; requires ITM support
+// extern crate panic_semihosting; // logs messages to the host stderr; requires a debugger
 
-entry!(main);
+use cortex_m_rt::entry;
 
+#[entry]
 fn main() -> ! {
     loop {
-        // TODO your code goes here
+        // your code goes here
     }
 }

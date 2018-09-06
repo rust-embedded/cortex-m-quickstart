@@ -1,6 +1,6 @@
 MEMORY
 {
-  /* NOTE K = KiBi = 1024 bytes */
+  /* NOTE 1 K = 1 KiBi = 1024 bytes */
   /* TODO Adjust these memory regions to match your device memory layout */
   /* These values correspond to the LM3S6965, one of the few devices QEMU can emulate */
   FLASH : ORIGIN = 0x00000000, LENGTH = 256K
@@ -19,6 +19,3 @@ MEMORY
 /* This is required only on microcontrollers that store some configuration right
    after the vector table */
 /* _stext = ORIGIN(FLASH) + 0x400; */
-
-/* Size of the heap (in bytes) */
-/* _heap_size = 1024; */
