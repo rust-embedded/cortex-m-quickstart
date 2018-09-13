@@ -1,9 +1,6 @@
-# TODO remove
-cargo-features = ["edition"]
-
 [package]
-edition = "2018"
 authors = ["{{authors}}"]
+edition = "2018"
 name = "{{project-name}}"
 version = "0.1.0"
 
@@ -14,7 +11,7 @@ cortex-m-semihosting = "0.3.1"
 panic-halt = "0.1.3"
 
 # Uncomment for the panic example.
-# panic-itm = "0.3.0"
+# panic-itm = "0.4.0"
 
 # Uncomment for the allocator example.
 # alloc-cortex-m = "0.3.5"

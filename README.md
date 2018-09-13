@@ -8,9 +8,11 @@ This project is developed and maintained by the [Cortex-M team][team].
 
 To build embedded programs using this template you'll need:
 
-- Rust 1.30-beta or nightly. `rustup default beta`
+- Rust 1.30, 1.30-beta, nightly-2018-09-13 or a newer toolchain. e.g. `rustup
+  default beta`
 
-- The `cargo generate` subcommand: `cargo install cargo-generate`
+- The `cargo generate` subcommand. [Installation
+  instructions](https://github.com/ashleygwilliams/cargo-generate#installation).
 
 - `rust-std` components (pre-compiled `core` crate) for the ARM Cortex-M
   targets. Run:
@@ -22,9 +24,10 @@ $ rustup target add thumbv6m-none-eabi thumbv7m-none-eabi thumbv7em-none-eabi th
 ## Using this template
 
 **NOTE**: This is the very short version that only covers building programs. For
-the long version check [the embedded Rust book][book].
+the long version, which additionally covers flashing, running and debugging
+programs, check [the embedded Rust book][book].
 
-[book]: https://rust-embedded.github.io/book/blinky/blinky.html
+[book]: http://book.rust-embedded.org
 
 0. Before we begin you need to identify some characteristics of the target
   device as these will be used to configure the project:
@@ -33,7 +36,8 @@ the long version check [the embedded Rust book][book].
 
 - Does the ARM core include an FPU? Cortex-M4**F** and Cortex-M7**F** cores do.
 
-- How much Flash memory and RAM does the target device has? e.g. 40 KB of RAM
+- How much Flash memory and RAM does the target device has? e.g. 256 KiB of
+  Flash and 32 KiB of RAM.
 
 - Where are Flash memory and RAM mapped in the address space? e.g. RAM is
   commonly located at address `0x2000_0000`.
@@ -46,9 +50,9 @@ STM32F303VCT6 microcontroller. This microcontroller has:
 
 - A Cortex-M4F core that includes a single precision FPU
 
-- 256 KB of Flash located at address 0x0800_0000.
+- 256 KiB of Flash located at address 0x0800_0000.
 
-- 40 KB of RAM located at address 0x2000_0000. (There's another RAM region but
+- 40 KiB of RAM located at address 0x2000_0000. (There's another RAM region but
   for simplicity we'll ignore it).
 
 1. Instantiate the template.
@@ -65,7 +69,6 @@ $ cd app
 2. Set a default compilation target. There are four options as mentioned at the
    bottom of `.cargo/config`. For the STM32F303VCT6, which has a Cortex-M4F
    core, we'll pick the `thumbv7em-none-eabihf` target.
-
 
 ``` console
 $ tail -n6 .cargo/config
