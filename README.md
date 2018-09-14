@@ -27,7 +27,7 @@ $ rustup target add thumbv6m-none-eabi thumbv7m-none-eabi thumbv7em-none-eabi th
 the long version, which additionally covers flashing, running and debugging
 programs, check [the embedded Rust book][book].
 
-[book]: http://book.rust-embedded.org
+[book]: https://rust-embedded.github.io/book
 
 0. Before we begin you need to identify some characteristics of the target
   device as these will be used to configure the project:
