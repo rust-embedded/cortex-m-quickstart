@@ -11,6 +11,9 @@ To build embedded programs using this template you'll need:
 - Rust 1.30, 1.30-beta, nightly-2018-09-13 or a newer toolchain. e.g. `rustup
   default beta`
 
+> **NOTE**: 1.30-beta is not out yet so you'll have to use the nightly channel
+> in the meantime.
+
 - The `cargo generate` subcommand. [Installation
   instructions](https://github.com/ashleygwilliams/cargo-generate#installation).
 
@@ -104,7 +107,7 @@ $ cargo build
 
 # License
 
-Licensed under either of
+This template is licensed under either of
 
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
   http://www.apache.org/licenses/LICENSE-2.0)
