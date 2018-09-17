@@ -1,37 +1,22 @@
-//! Prints "Hello, world!" on the OpenOCD console using semihosting
-//!
-//! ---
+//! Prints "Hello, world!" on the host console using semihosting
 
 #![no_main]
 #![no_std]
 
-#[macro_use]
-extern crate cortex_m_rt as rt;
-extern crate cortex_m_semihosting as sh;
-extern crate panic_semihosting;
+extern crate panic_halt;
 
 use core::fmt::Write;
 
-use rt::ExceptionFrame;
-use sh::hio;
+use cortex_m_rt::entry;
+use cortex_m_semihosting::{debug, hio};
 
-entry!(main);
-
+#[entry]
 fn main() -> ! {
     let mut stdout = hio::hstdout().unwrap();
     writeln!(stdout, "Hello, world!").unwrap();
 
+    // exit QEMU or the debugger section
+    debug::exit(debug::EXIT_SUCCESS);
+
     loop {}
-}
-
-exception!(HardFault, hard_fault);
-
-fn hard_fault(ef: &ExceptionFrame) -> ! {
-    panic!("HardFault at {:#?}", ef);
-}
-
-exception!(*, default_handler);
-
-fn default_handler(irqn: i16) {
-    panic!("Unhandled exception (IRQn = {})", irqn);
 }

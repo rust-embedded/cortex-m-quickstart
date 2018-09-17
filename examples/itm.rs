@@ -17,38 +17,17 @@
 #![no_main]
 #![no_std]
 
-#[macro_use]
-extern crate cortex_m;
-#[macro_use]
-extern crate cortex_m_rt as rt;
-extern crate panic_semihosting;
+extern crate panic_halt;
 
-use cortex_m::{asm, Peripherals};
-use rt::ExceptionFrame;
+use cortex_m::{iprintln, Peripherals};
+use cortex_m_rt::entry;
 
-entry!(main);
-
+#[entry]
 fn main() -> ! {
     let mut p = Peripherals::take().unwrap();
     let stim = &mut p.ITM.stim[0];
 
     iprintln!(stim, "Hello, world!");
 
-    loop {
-        asm::bkpt();
-    }
-}
-
-// define the hard fault handler
-exception!(HardFault, hard_fault);
-
-fn hard_fault(ef: &ExceptionFrame) -> ! {
-    panic!("HardFault at {:#?}", ef);
-}
-
-// define the default exception handler
-exception!(*, default_handler);
-
-fn default_handler(irqn: i16) {
-    panic!("Unhandled exception (IRQn = {})", irqn);
+    loop {}
 }
