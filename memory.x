@@ -19,3 +19,16 @@ MEMORY
 /* This is required only on microcontrollers that store some configuration right
    after the vector table */
 /* _stext = ORIGIN(FLASH) + 0x400; */
+
+/* Example of putting non-initialized variables into custom RAM locations. */
+/* This assumes you have defined a region RAM2 above, and in the Rust
+   sources added the attribute `#[link_section = ".ram2bss"]` to the data
+   you want to place there. */
+/* Note that the section will not be zero-initialized by the runtime! */
+/* SECTIONS {
+     .ram2bss (NOLOAD) : ALIGN(4) {
+       *(.ram2bss);
+       . = ALIGN(4);
+     }
+   } INSERT AFTER .bss;
+*/
