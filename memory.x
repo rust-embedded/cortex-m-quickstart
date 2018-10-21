@@ -29,6 +29,6 @@ MEMORY
      .ram2bss (NOLOAD) : ALIGN(4) {
        *(.ram2bss);
        . = ALIGN(4);
-     }
+     } > RAM2
    } INSERT AFTER .bss;
 */
