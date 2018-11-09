@@ -51,7 +51,7 @@ fn main() -> ! {
         while !syst.has_wrapped() {}
 
         // trigger the `EXTI0` interrupt
-        nvic.set_pending(Interrupt::EXTI0);
+        NVIC::pend(Interrupt::EXTI0);
     }
 }
 
