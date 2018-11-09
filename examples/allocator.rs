@@ -17,13 +17,12 @@
 extern crate panic_halt;
 
 use core::alloc::Layout;
-use core::fmt::Write;
 
 use alloc::vec;
 use alloc_cortex_m::CortexMHeap;
 use cortex_m::asm;
 use cortex_m_rt::entry;
-use cortex_m_semihosting::hio;
+use cortex_m_semihosting::hprintln;
 
 // this is the allocator the application will use
 #[global_allocator]
@@ -39,8 +38,7 @@ fn main() -> ! {
     // Growable array allocated on the heap
     let xs = vec![0, 1, 2];
 
-    let mut stdout = hio::hstdout().unwrap();
-    writeln!(stdout, "{:?}", xs).unwrap();
+    hprintln!("{:?}", xs).unwrap();
 
     loop {}
 }

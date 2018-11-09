@@ -5,17 +5,15 @@
 
 extern crate panic_halt;
 
-use core::fmt::Write;
-
 use cortex_m_rt::entry;
-use cortex_m_semihosting::{debug, hio};
+use cortex_m_semihosting::{debug, hprintln};
 
 #[entry]
 fn main() -> ! {
-    let mut stdout = hio::hstdout().unwrap();
-    writeln!(stdout, "Hello, world!").unwrap();
+    hprintln!("Hello, world!").unwrap();
 
-    // exit QEMU or the debugger section
+    // exit QEMU
+    // NOTE do not run this on hardware; it can corrupt OpenOCD state
     debug::exit(debug::EXIT_SUCCESS);
 
     loop {}
