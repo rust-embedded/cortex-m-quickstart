@@ -6,9 +6,9 @@ name = "{{project-name}}"
 version = "0.1.0"
 
 [dependencies]
-cortex-m = "0.5.7"
-cortex-m-rt = "0.6.3"
-cortex-m-semihosting = "0.3.1"
+cortex-m = "0.5.8"
+cortex-m-rt = "0.6.5"
+cortex-m-semihosting = "0.3.2"
 panic-halt = "0.2.0"
 
 # Uncomment for the panic example.
