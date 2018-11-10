@@ -27,11 +27,9 @@
 #[allow(unused_extern_crates)]
 extern crate panic_halt;
 
-use core::fmt::Write;
-
 use cortex_m::peripheral::syst::SystClkSource;
 use cortex_m_rt::entry;
-use cortex_m_semihosting::hio::{self, HStdout};
+use cortex_m_semihosting::hprint;
 use stm32f30x::{interrupt, Interrupt};
 
 #[entry]
@@ -53,19 +51,13 @@ fn main() -> ! {
         while !syst.has_wrapped() {}
 
         // trigger the `EXTI0` interrupt
-        nvic.set_pending(Interrupt::EXTI0);
+        NVIC::pend(Interrupt::EXTI0);
     }
 }
 
 // try commenting out this line: you'll end in `default_handler` instead of in `exti0`
-interrupt!(EXTI0, exti0, state: Option<HStdout> = None);
+interrupt!(EXTI0, exti0);
 
-fn exti0(state: &mut Option<HStdout>) {
-    if state.is_none() {
-        *state = Some(hio::hstdout().unwrap());
-    }
-
-    if let Some(hstdout) = state.as_mut() {
-        hstdout.write_str(".").unwrap();
-    }
+fn exti0() {
+    hprint!(".").unwrap();
 }

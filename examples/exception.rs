@@ -12,12 +12,10 @@
 
 extern crate panic_halt;
 
-use core::fmt::Write;
-
 use cortex_m::peripheral::syst::SystClkSource;
 use cortex_m::Peripherals;
 use cortex_m_rt::{entry, exception};
-use cortex_m_semihosting::hio::{self, HStdout};
+use cortex_m_semihosting::hprint;
 
 #[entry]
 fn main() -> ! {
@@ -35,13 +33,5 @@ fn main() -> ! {
 
 #[exception]
 fn SysTick() {
-    static mut STDOUT: Option<HStdout> = None;
-
-    if STDOUT.is_none() {
-        *STDOUT = Some(hio::hstdout().unwrap());
-    }
-
-    if let Some(hstdout) = STDOUT.as_mut() {
-        hstdout.write_str(".").unwrap();
-    }
+    hprint!(".").unwrap();
 }
