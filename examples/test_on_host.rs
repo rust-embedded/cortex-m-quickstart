@@ -32,6 +32,10 @@ fn main() -> ! {
     }
 }
 
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
 #[cfg(test)]
 mod test {
   use super::*;
@@ -39,6 +43,6 @@ mod test {
   #[test]
   fn foo() {
     println!("tests work!");
-    assert!(1 == 1);
+    assert!(2 == add(1,1));
   }
 }
