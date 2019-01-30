@@ -5,9 +5,6 @@
 //!
 //! [`svd2rust`]: https://crates.io/crates/svd2rust
 //!
-//! Device crates also provide an `interrupt!` macro (behind the "rt" feature) to register interrupt
-//! handlers.
-//!
 //! This example depends on the [`stm32f103xx`] crate so you'll have to add it to your Cargo.toml.
 //!
 //! [`stm32f103xx`]: https://crates.io/crates/stm32f103xx
@@ -55,9 +52,7 @@ fn main() -> ! {
     }
 }
 
-// try commenting out this line: you'll end in `default_handler` instead of in `exti0`
-interrupt!(EXTI0, exti0);
-
-fn exti0() {
+#[interrupt]
+fn EXTI0() {
     hprint!(".").unwrap();
 }
