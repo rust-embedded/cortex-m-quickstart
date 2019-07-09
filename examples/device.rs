@@ -27,7 +27,7 @@ extern crate panic_halt;
 use cortex_m::peripheral::syst::SystClkSource;
 use cortex_m_rt::entry;
 use cortex_m_semihosting::hprint;
-use stm32f30x::{interrupt, Interrupt};
+use stm32f30x::{interrupt, Interrupt, NVIC};
 
 #[entry]
 fn main() -> ! {
