@@ -102,6 +102,12 @@ MEMORY
 $ cargo build
 ```
 
+## VS Code
+
+This template includes launch configurations for debugging CortexM programs with Visual Studio Code located in the `.vscode/` directory.  
+See [.vscode/README.md](./.vscode/README.md) for more information.  
+If you're not using VS Code, you can safely delete the directory from the generated project.
+
 # License
 
 This template is licensed under either of
