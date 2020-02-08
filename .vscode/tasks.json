@@ -9,7 +9,7 @@
              * but we need to provide a label for it,
              * so we can invoke it from the debug launcher.
              */
-            "label": "build",
+            "label": "cargo build",
             "type": "cargo",
             "subcommand": "build",
             "problemMatcher": [
@@ -19,6 +19,42 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "cargo build --release",
+            "type": "process",
+            "command": "cargo",
+            "args": ["build", "--release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "cargo build --examples",
+            "type": "process",
+            "command": "cargo",
+            "args": ["build","--examples"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "cargo build --examples --release",
+            "type": "process",
+            "command": "cargo",
+            "args": ["build","--examples", "--release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "cargo clean",
+            "type": "cargo",
+            "subcommand": "clean",
+            "group": "build"
         },
     ]
 }
