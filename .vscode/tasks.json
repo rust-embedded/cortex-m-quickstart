@@ -10,8 +10,9 @@
              * so we can invoke it from the debug launcher.
              */
             "label": "cargo build",
-            "type": "cargo",
-            "subcommand": "build",
+            "type": "process",
+            "command": "cargo",
+            "args": ["build"],
             "problemMatcher": [
                 "$rustc"
             ],
@@ -52,8 +53,10 @@
         },
         {
             "label": "cargo clean",
-            "type": "cargo",
-            "subcommand": "clean",
+            "type": "process",
+            "command": "cargo",
+            "args": ["clean"],
+            "problemMatcher": [],
             "group": "build"
         },
     ]
