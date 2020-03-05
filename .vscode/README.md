@@ -25,9 +25,6 @@ Otherwise, you can use the Extensions view to search for and install them, or go
 The quickstart comes with two debug configurations.
 Both are configured to build the project, using the default settings from `.cargo/config`, prior to starting a debug session.
 
-_Note: When you open the project in the editor, you must open an `*.rs` file to trigger the Rust Language Server.
-Failure to do so will cause a failure to find the `build` task._
-
 1. QEMU: Starts a debug session using an emulation of the `LM3S6965EVB` mcu.
    - This works on a fresh `cargo generate` without modification of any of the settings described above.
    - Semihosting output will be written to the Output view `Adapter Output`.
