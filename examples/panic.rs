@@ -10,15 +10,15 @@
 // Pick one of these panic handlers:
 
 // `panic!` halts execution; the panic message is ignored
-extern crate panic_halt;
+use panic_halt as _;
 
 // Reports panic messages to the host stderr using semihosting
 // NOTE to use this you need to uncomment the `panic-semihosting` dependency in Cargo.toml
-// extern crate panic_semihosting;
+// use panic_semihosting as _;
 
 // Logs panic messages using the ITM (Instrumentation Trace Macrocell)
 // NOTE to use this you need to uncomment the `panic-itm` dependency in Cargo.toml
-// extern crate panic_itm;
+// use panic_itm as _;
 
 use cortex_m_rt::entry;
 

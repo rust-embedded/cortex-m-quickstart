@@ -15,7 +15,7 @@
 #![no_std]
 
 extern crate alloc;
-extern crate panic_halt;
+use panic_halt as _;
 
 use self::alloc::vec;
 use core::alloc::Layout;
