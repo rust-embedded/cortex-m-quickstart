@@ -17,7 +17,7 @@
 #![no_main]
 #![no_std]
 
-extern crate panic_halt;
+use panic_halt as _;
 
 use cortex_m::{iprintln, Peripherals};
 use cortex_m_rt::entry;

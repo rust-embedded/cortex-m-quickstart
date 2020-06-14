@@ -26,7 +26,7 @@
 #![no_std]
 
 #[allow(unused_extern_crates)]
-extern crate panic_halt;
+use panic_halt as _;
 
 use cortex_m::peripheral::syst::SystClkSource;
 use cortex_m_rt::entry;
