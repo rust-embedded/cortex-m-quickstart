@@ -15,7 +15,7 @@ panic-halt = "0.2.0"
 # panic-itm = "0.4.1"
 
 # Uncomment for the allocator example.
-# alloc-cortex-m = "0.3.5"
+# alloc-cortex-m = "0.4.0"
 
 # Uncomment for the device example.
 # Update `memory.x`, set target to `thumbv7em-none-eabihf` in `.cargo/config`,
