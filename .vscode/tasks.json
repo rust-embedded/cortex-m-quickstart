@@ -9,7 +9,7 @@
              * but we need to provide a label for it,
              * so we can invoke it from the debug launcher.
              */
-            "label": "cargo build",
+            "label": "Cargo Build (debug)",
             "type": "process",
             "command": "cargo",
             "args": ["build"],
@@ -22,7 +22,7 @@
             }
         },
         {
-            "label": "cargo build --release",
+            "label": "Cargo Build (release)",
             "type": "process",
             "command": "cargo",
             "args": ["build", "--release"],
@@ -32,7 +32,7 @@
             "group": "build"
         },
         {
-            "label": "cargo build --examples",
+            "label": "Cargo Build Examples (debug)",
             "type": "process",
             "command": "cargo",
             "args": ["build","--examples"],
@@ -42,7 +42,7 @@
             "group": "build"
         },
         {
-            "label": "cargo build --examples --release",
+            "label": "Cargo Build Examples (release)",
             "type": "process",
             "command": "cargo",
             "args": ["build","--examples", "--release"],
@@ -52,7 +52,7 @@
             "group": "build"
         },
         {
-            "label": "cargo clean",
+            "label": "Cargo Clean",
             "type": "process",
             "command": "cargo",
             "args": ["clean"],
