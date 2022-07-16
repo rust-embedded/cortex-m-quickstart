@@ -71,7 +71,7 @@ $ cd app
    core, we'll pick the `thumbv7em-none-eabihf` target.
 
 ``` console
-$ tail -n6 .cargo/config
+$ tail -n9 .cargo/config.toml
 ```
 
 ``` toml
@@ -81,6 +81,9 @@ $ tail -n6 .cargo/config
 # target = "thumbv7m-none-eabi"    # Cortex-M3
 # target = "thumbv7em-none-eabi"   # Cortex-M4 and Cortex-M7 (no FPU)
 target = "thumbv7em-none-eabihf" # Cortex-M4F and Cortex-M7F (with FPU)
+# target = "thumbv8m.base-none-eabi"   # Cortex-M23
+# target = "thumbv8m.main-none-eabi"   # Cortex-M33 (no FPU)
+# target = "thumbv8m.main-none-eabihf" # Cortex-M33 (with FPU)
 ```
 
 3. Enter the memory region information into the `memory.x` file.
