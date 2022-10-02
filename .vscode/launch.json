@@ -1,7 +1,7 @@
 {
     /* 
-     * Requires the Rust Language Server (RLS) and Cortex-Debug extensions
-     * https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
+     * Requires the Rust Language Server (rust-analyzer) and Cortex-Debug extensions
+     * https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
      * https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug
      */
     "version": "0.2.0",
