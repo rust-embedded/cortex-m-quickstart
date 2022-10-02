@@ -11,13 +11,13 @@ This directory contains configurations for two platforms:
 If you have the `code` command in your path, you can run the following commands to install the necessary extensions.
 
 ```sh
-code --install-extension rust-lang.rust
+code --install-extension rust-lang.rust-analyzer
 code --install-extension marus25.cortex-debug
 ```
 
 Otherwise, you can use the Extensions view to search for and install them, or go directly to their marketplace pages and click the "Install" button.
 
-- [Rust Language Server (RLS)](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust)
+- [Rust Language Server (rust-analyzer)](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 - [Cortex-Debug](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug)
 
 ## Use
