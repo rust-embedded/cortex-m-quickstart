@@ -1,6 +1,30 @@
+# Configure defaults for Cargo that allow `cargo run`, `cargo build`, and
+# `cargo test` to work for embedded (or emulated) targets.
+
+[build]
+# Pick ONE of these compilation targets to be Cargo's default
+# target = "thumbv6m-none-eabi"        # Cortex-M0 and Cortex-M0+
+target = "thumbv7m-none-eabi"        # Cortex-M3
+# target = "thumbv7em-none-eabi"       # Cortex-M4 and Cortex-M7 (no FPU)
+# target = "thumbv7em-none-eabihf"     # Cortex-M4F and Cortex-M7F (with FPU)
+# target = "thumbv8m.base-none-eabi"   # Cortex-M23
+# target = "thumbv8m.main-none-eabi"   # Cortex-M33 (no FPU)
+# target = "thumbv8m.main-none-eabihf" # Cortex-M33 (with FPU)
+
 [target.thumbv7m-none-eabi]
+# If you change the target in the `[build]` section above, you will need to
+# update the target triple in this section's name to match. If you commonly
+# use more than one target, you will need to duplicate this section.
+#
 # uncomment this to make `cargo run` execute programs on QEMU
-# runner = "qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -semihosting-config enable=on,target=native -kernel"
+# runner = """
+#   qemu-system-arm \
+#   -cpu cortex-m3 \    # Change this as apropriate for the target
+#   -machine lm3s6965evb \
+#   -nographic \
+#   -semihosting-config enable=on,target=native \
+#   -kernel
+#   """
 
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
 # uncomment ONE of these three option to make `cargo run` start a GDB session
@@ -29,12 +53,4 @@ rustflags = [
   # "-C", "link-arg=-nostartfiles",
 ]
 
-[build]
-# Pick ONE of these compilation targets
-# target = "thumbv6m-none-eabi"        # Cortex-M0 and Cortex-M0+
-target = "thumbv7m-none-eabi"        # Cortex-M3
-# target = "thumbv7em-none-eabi"       # Cortex-M4 and Cortex-M7 (no FPU)
-# target = "thumbv7em-none-eabihf"     # Cortex-M4F and Cortex-M7F (with FPU)
-# target = "thumbv8m.base-none-eabi"   # Cortex-M23
-# target = "thumbv8m.main-none-eabi"   # Cortex-M33 (no FPU)
-# target = "thumbv8m.main-none-eabihf" # Cortex-M33 (with FPU)
+
