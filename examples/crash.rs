@@ -82,14 +82,25 @@
 use panic_halt as _;
 
 use core::ptr;
+use core::fmt::Write;
 
-use cortex_m_rt::entry;
+use cortex_m_rt::{entry, exception, ExceptionFrame};
+use cortex_m_semihosting::hio;
 
 #[entry]
 fn main() -> ! {
     unsafe {
         // read an address outside of the RAM region; this causes a HardFault exception
         ptr::read_volatile(0x2FFF_FFFF as *const u32);
+    }
+
+    loop {}
+}
+
+#[exception]
+fn HardFault(ef: &ExceptionFrame) -> ! {
+    if let Ok(mut hstdout) = hio::hstdout() {
+        writeln!(hstdout, "{:#?}", ef).ok();
     }
 
     loop {}
