@@ -6,16 +6,16 @@ name = "{{project-name}}"
 version = "0.1.0"
 
 [dependencies]
-cortex-m = "0.6.0"
-cortex-m-rt = "0.6.10"
-cortex-m-semihosting = "0.3.3"
-panic-halt = "0.2.0"
+cortex-m = { version = "0.7.6", features = ["critical-section-single-core"] }
+cortex-m-rt = "0.7"
+cortex-m-semihosting = "0.5"
+panic-halt = "1.0.0"
 
 # Uncomment for the panic example.
 # panic-itm = "0.4.1"
 
 # Uncomment for the allocator example.
-# alloc-cortex-m = "0.4.0"
+# embedded-alloc = "0.6.0"
 
 # Uncomment for the device example.
 # Update `memory.x`, set target to `thumbv7em-none-eabihf` in `.cargo/config`,

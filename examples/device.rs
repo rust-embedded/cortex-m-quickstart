@@ -58,5 +58,5 @@ fn main() -> ! {
 
 #[interrupt]
 fn EXTI0() {
-    hprint!(".").unwrap();
+    hprint!(".");
 }

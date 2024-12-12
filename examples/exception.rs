@@ -33,5 +33,5 @@ fn main() -> ! {
 
 #[exception]
 fn SysTick() {
-    hprint!(".").unwrap();
+    hprint!(".");
 }
