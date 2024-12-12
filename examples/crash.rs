@@ -97,8 +97,8 @@ fn main() -> ! {
     loop {}
 }
 
-#[exception]
-fn HardFault(ef: &ExceptionFrame) -> ! {
+#[exception(trampoline = true)]
+unsafe fn HardFault(ef: &ExceptionFrame) -> ! {
     if let Ok(mut hstdout) = hio::hstdout() {
         writeln!(hstdout, "{:#?}", ef).ok();
     }
