@@ -1,6 +1,7 @@
 [target.thumbv7m-none-eabi]
 # uncomment this to make `cargo run` execute programs on QEMU
 # runner = "qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -semihosting-config enable=on,target=native -kernel"
+# 取消注释这一行，使 `cargo run` 在 QEMU 上执行程序
 
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
 # uncomment ONE of these three option to make `cargo run` start a GDB session
@@ -8,26 +9,35 @@
 # runner = "arm-none-eabi-gdb -q -x openocd.gdb"
 # runner = "gdb-multiarch -q -x openocd.gdb"
 # runner = "gdb -q -x openocd.gdb"
+# 取消注释以下三个选项之一，使 `cargo run` 启动一个 GDB 会话
+# 选择哪个选项取决于你的系统
 
 rustflags = [
   # Previously, the linker arguments --nmagic and -Tlink.x were set here.
   # They are now set by build.rs instead. The linker argument can still
   # only be set here, if a custom linker is needed.
+  # 以前，链接器参数 --nmagic 和 -Tlink.x 是在这里设置的。
+  # 现在它们由 build.rs 设置。如果你需要自定义链接器，链接器参数仍然只能在这里设置。
 
   # By default, the LLD linker is used, which is shipped with the Rust
   # toolchain. If you run into problems with LLD, you can switch to the
   # GNU linker by uncommenting this line:
   # "-C", "linker=arm-none-eabi-ld",
+  # 默认情况下，使用 LLD 链接器，它随 Rust 工具链一起提供。如果你在使用 LLD 时遇到问题，
+  # 可以通过取消注释以下行来切换到 GNU 链接器：
 
   # If you need to link to pre-compiled C libraries provided by a C toolchain
   # use GCC as the linker by uncommenting the three lines below:
   # "-C", "linker=arm-none-eabi-gcc",
   # "-C", "link-arg=-Wl,-Tlink.x",
   # "-C", "link-arg=-nostartfiles",
+  # 如果你需要链接由 C 工具链提供的预编译的 C 库，
+  # 可以通过取消注释以下三行来使用 GCC 作为链接器：
 ]
 
 [build]
 # Pick ONE of these default compilation targets
+# 选择以下默认编译目标之一
 # target = "thumbv6m-none-eabi"        # Cortex-M0 and Cortex-M0+
 target = "thumbv7m-none-eabi"        # Cortex-M3
 # target = "thumbv7em-none-eabi"       # Cortex-M4 and Cortex-M7 (no FPU)

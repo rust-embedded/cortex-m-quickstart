@@ -1,14 +1,21 @@
 {
 	// See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+	// 请访问上述链接以了解有关工作区推荐的更多信息。
 	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+	// 扩展标识符格式：${发布者}.${名称}。例如：vscode.csharp
 
 	// List of extensions which should be recommended for users of this workspace.
+	// 应为该工作区用户推荐的扩展列表。
 	"recommendations": [
-		"rust-lang.rust-analyzer",
-		"marus25.cortex-debug",
+		"rust-lang.rust-analyzer",  // Rust 语言支持，提供代码分析、补全、格式化等功能
+		"marus25.cortex-debug",     // Cortex-M 微控制器调试支持，适用于嵌入式开发
+		"barbosshack.crates-io",   // Rust 包管理器支持，提供包搜索、安装、更新等功能
+		"panicbit.cargo",            // Cargo 任务管理器支持，提供 Cargo 任务的运行和调试
+		"tamasfe.even-better-toml",  // TOML 文件支持，提供语法高亮、格式化等功能
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
+	// VS Code 推荐但不应为该工作区用户推荐的扩展列表。
 	"unwantedRecommendations": [
-		
+		// 此处可以列出不希望推荐的扩展，例如与当前项目无关的工具或插件
 	]
 }
